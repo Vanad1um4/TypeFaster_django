@@ -1,0 +1,14 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/my_library.css' %}">
+{% endblock css %}
+
+{% block content %}
+    <h2>My library</h2>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'main/my_library.js' %}" defer></script>
+{% endblock js %}

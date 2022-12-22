@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Hyper-typer</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'main/base.css' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'main/favicon.ico' %}"/>
+
+        {% block css %}{% endblock css %}
+
+    </head>
+    <body>
+        <div class="wrapper">
+
+
+            <div class="header outer-box">
+                <div class="menu inner-box">
+
+                    <div class="home menu-button {% if "home" in request.path %}primary-url{% else %}secondary-url{% endif %}">
+                        <a class="a-btn" href="{% url 'home' %}">Home</a>
+                    </div>
+                    <div class="home menu-button-divider"></div>
+
+                    {% if user.is_authenticated %}
+                        <div class="books menu-button {% if "my_library" in request.path %}primary-url{% else %}secondary-url{% endif %}">
+                            <a class="a-btn" href="{% url 'my_library' %}">My library</a>
+                        </div>
+                        <div class="type menu-button {% if "type" in request.path %}primary-url{% else %}secondary-url{% endif %}">
+                            <a class="a-btn" href="{% url 'type_no_txt' %}">Type</a>
+                        </div>
+                        <div class="add menu-button {% if "add_book" in request.path %}primary-url{% else %}secondary-url{% endif %}">
+                            <a class="a-btn" href="{% url 'add_book' %}">Add book</a>
+                        </div>
+                        <div class="logout menu-button">
+                            <a class="a-btn" href="{% url 'logout' %}">Log out</a>
+                        </div>
+                    {% endif %}
+                    {% if not user.is_authenticated %}
+                        <div class="login menu-button"><a class="a-btn" href="{% url 'login' %}">Log in</a></div>
+                        <div class="register menu-button"><a class="a-btn" href="{% url 'register' %}">Register</a></div>
+                    {% endif %}
+
+                </div>
+            </div>
+            <div class="content outer-box">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div>{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}{% endblock content %}
+
+            </div>
+        </div>
+
+        {% block js %}{% endblock js %}
+
+    </body>
+</html>
+
+

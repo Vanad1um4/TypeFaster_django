@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+env
+keys_project/logs/debug.log
+keys_project/logs/exceptions.log
+nohup.out
