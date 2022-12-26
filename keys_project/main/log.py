@@ -42,20 +42,20 @@ def get_info_logger(log_name, print=False):
     return info_logger
 
 
-def get_crit_logger(log_name, print=False):
-    crit_logger = logging.getLogger(log_name)
+def get_err_logger(log_name, print=False):
+    err_logger = logging.getLogger(log_name)
     log_formatter = logging.Formatter(log_format)
 
     if print:
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(log_formatter)
-        crit_logger.addHandler(stream_handler)
+        err_logger.addHandler(stream_handler)
 
-    file_handler = logging.FileHandler('logs/critical.log', mode='a')
+    file_handler = logging.FileHandler('logs/errors.log', mode='a')
     file_handler.setFormatter(log_formatter)
-    file_handler.setLevel(logging.CRITICAL)
-    crit_logger.addHandler(file_handler)
+    file_handler.setLevel(logging.ERROR)
+    err_logger.addHandler(file_handler)
 
-    crit_logger.setLevel(logging.CRITICAL)
+    err_logger.setLevel(logging.ERROR)
 
-    return crit_logger
+    return err_logger

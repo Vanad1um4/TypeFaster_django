@@ -6,7 +6,31 @@
 {% endblock css %}
 
 {% block content %}
-    <h2>My library</h2>
+    {# <h2>My library</h2> #}
+    <div class="container">
+        <div class="book-list">
+            {# <div class="header"></div> #}
+        </div>
+        <div class="text-list">
+            <div class="new-book hidden">
+                <div class="cont">
+                    <div class="header">Название:</div>
+                    <input class="name new-book-input"></input>
+                    <button class="btn add new-book-btn-add">ADD</button>
+                    <button class="btn cancel new-book-btn-cancel">Cancel</button>
+                </div>
+            </div>
+            <div class="book hidden">
+                <div class="cont">
+                    <div class="header book-name"></div>
+                    <button class="btn delete book-btn-delete">Delete</button>
+                    <button class="btn yes-delete book-btn-yes-delete hidden">YES, DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% csrf_token %}
+    {{ data|json_script:'data' }}
 {% endblock content %}
 
 {% block js %}

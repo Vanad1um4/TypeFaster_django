@@ -1,0 +1,161 @@
+.hidden {
+    display: none;
+}
+
+h2 {
+    margin: 7px;
+    text-align: center;
+}
+.container {
+    display: grid;
+    grid-template-columns: 35% 65%;
+}
+
+.container > .book-list {
+}
+
+.container > .book-list > .book-cont {
+    background-color: var(--grey2);
+    border-radius: 3px;
+    /* margin: 5px 0px; */
+    margin-bottom: 5px;
+    padding: 5px 5px;
+    /* min-height: 56px; */
+    height: 40px;
+    position: relative;
+    bottom: 0px;
+    transition: 0.1s;
+
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+}
+.container > .book-list > .book-cont-add {
+    /* height: auto; */
+    /* min-height: 40px; */
+    /* max-height: auto; */
+}
+
+.container > .book-list > .book-cont > .book-name, .book-plus {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--grey7);
+    pointer-events: none;
+
+    overflow: hidden;
+    /* width: 325px; */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.container > .book-list > .book-cont > .book-plus {
+    /* color: var(--grey7); */
+    text-align: center;
+    width: 100%;
+    font-size: 33px;
+    /* pointer-events: none; */
+}
+
+.container > .book-list > .book-cont-add:hover {
+    /* color: var(--grey8); */
+    /* background-color: var(--grey3); */
+    /* cursor: pointer; */
+    /* left: 5px; */
+}
+.container > .book-list > .hoverable:hover {
+    color: var(--grey8);
+    background-color: var(--grey3);
+    cursor: pointer;
+    left: 5px;
+}
+/* .container > .book-list > .book-cont-add { */
+/*     display: grid; */
+/*     grid-template-columns: 100%; */
+/* } */
+/* .container > .book-list > .book-cont-add > .new-book-textarea-cont > .new-book-textarea-name { */
+/*     width: 98%; */
+/* } */
+/* .container > .book-list > .book-cont-add > .new-book-btn-cancel { */
+/*     font-weight: 700; */
+/*     font-size: 20px; */
+/* } */
+/* .container > .book-list > .book-cont-add > .new-book-btn-add { */
+/*     font-weight: 700; */
+/*     font-size: 20px; */
+/* } */
+
+
+
+
+
+.container > .text-list {
+    margin-left: 8px;
+}
+
+/* .container > .text-list > .hidden { */
+/*     display: none; */
+/* } */
+
+
+
+.container > .text-list > .new-book > .cont {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+.container > .text-list > .new-book > .cont > * {
+    /* margin: 0px 5px; */
+    font-weight: 700;
+    font-size: 20px;
+    /* flex-grow: 1; */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+}
+.container > .text-list > .new-book > .cont > .name {
+    flex-grow: 1;
+}
+.container > .text-list > .new-book > .cont > .btn {
+}
+.container > .text-list > .new-book > .cont > .add {
+    /* background-color: green; */
+}
+.container > .text-list > .new-book > .cont > .cancel {
+    /* background-color: white; */
+}
+
+
+
+
+
+
+.container > .text-list > .book > .cont {
+    display: flex;
+    gap: 5px;
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+.container > .text-list > .book > .cont > * {
+    /* margin: 0px 5px; */
+    font-weight: 700;
+    font-size: 20px;
+    /* flex-grow: 1; */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+}
+.container > .text-list > .book > .cont > .header {
+    flex-grow: 1;
+
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.container > .text-list > .book > .cont > .btn {
+    white-space: nowrap;
+    /* background-color: green; */
+}
+.container > .text-list > .book > .cont > .yes-delete {
+    /* display: none; */
+    /* background-color: white; */
+}

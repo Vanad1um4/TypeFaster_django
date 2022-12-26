@@ -1,14 +1,7 @@
 from django.db import connection
-# from datetime import date, datetime
 from .log import *
 
-# debug_logger = get_debug_logger(f'{__name__} (debug)')
-# info_logger = get_info_logger(f'{__name__} (info)', print=True)
-# crit_logger = get_crit_logger(f'{__name__} (crit)')
-#
-# debug_logger.debug(f'something')
-# info_logger.info(f'something')
-# crit_logger.critical(f'something')
+err_logger = get_err_logger(f'{__name__}', True)
 
 
 def dict_fetchall(cursor):
@@ -21,6 +14,48 @@ def dict_fetchall(cursor):
 
 # TABLE BOOKS
 # id, book_name, users_id,
+
+
+def db_return_users_books(user_id):
+    try:
+        with connection.cursor() as c:
+            sql = '''
+                select id, name
+                from books
+                where users_id=%s
+                ;'''
+            values = (user_id,)
+            c.execute(sql, values)
+            res = c.fetchall()
+            return ('success', res)
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_create_book(book_name, user_id):
+    try:
+        with connection.cursor() as c:
+            sql = 'insert into books (name, users_id) values (%s, %s);'
+            values = (book_name, user_id,)
+            c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_delete_book(book_id, user_id):
+    try:
+        with connection.cursor() as c:
+            sql = 'delete from books where id=%s and users_id=%s;'
+            values = (book_id, user_id,)
+            c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
 
 # TABLE TEXTS
 # id, text, stats, books_id, chapter_str_long, chapter_str_short, done_bool,
