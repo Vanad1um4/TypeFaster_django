@@ -13,17 +13,15 @@ def dict_fetchall(cursor):
 # id,
 
 # TABLE BOOKS
-# id, book_name, users_id,
+# id, book_name, user_id,
 
+
+### BOOK FNs ##################################################################
 
 def db_return_users_books(user_id):
     try:
         with connection.cursor() as c:
-            sql = '''
-                select id, name
-                from books
-                where users_id=%s
-                ;'''
+            sql = 'select id, name from books where user_id=%s order by id;'
             values = (user_id,)
             c.execute(sql, values)
             res = c.fetchall()
@@ -36,8 +34,20 @@ def db_return_users_books(user_id):
 def db_create_book(book_name, user_id):
     try:
         with connection.cursor() as c:
-            sql = 'insert into books (name, users_id) values (%s, %s);'
+            sql = 'insert into books (name, user_id) values (%s, %s);'
             values = (book_name, user_id,)
+            c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_rename_book(book_name, book_id, user_id):
+    try:
+        with connection.cursor() as c:
+            sql = 'update books set name=%s where id=%s and user_id=%s;'
+            values = (book_name, book_id, user_id,)
             c.execute(sql, values)
             return ('success', [])
     except Exception as exc:
@@ -48,7 +58,7 @@ def db_create_book(book_name, user_id):
 def db_delete_book(book_id, user_id):
     try:
         with connection.cursor() as c:
-            sql = 'delete from books where id=%s and users_id=%s;'
+            sql = 'delete from books where id=%s and user_id=%s;'
             values = (book_id, user_id,)
             c.execute(sql, values)
             return ('success', [])
@@ -57,5 +67,31 @@ def db_delete_book(book_id, user_id):
         return ('failure', [])
 
 
+### TEXT FNs ##################################################################
+
 # TABLE TEXTS
-# id, text, stats, books_id, chapter_str_long, chapter_str_short, done_bool,
+# id, book_id, user_id, chapter_str, text, stats, done_bool
+
+def db_get_texts(book_id, user_id):
+    try:
+        with connection.cursor() as c:
+            sql = 'select * from texts where book_id=%s and user_id=%s order by id;'
+            values = (book_id, user_id)
+            c.execute(sql, values)
+            res = dict_fetchall(c)
+            return ('success', res)
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_create_text(book_id, user_id, chapter, text, stats):
+    try:
+        with connection.cursor() as c:
+            sql = 'insert into texts (book_id, user_id, chapter, text, stats) values (%s, %s, %s, %s, %s);'
+            values = (book_id, user_id, chapter, text, stats)
+            c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])

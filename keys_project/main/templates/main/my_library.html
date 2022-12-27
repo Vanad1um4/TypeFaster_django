@@ -6,11 +6,11 @@
 {% endblock css %}
 
 {% block content %}
-    {# <h2>My library</h2> #}
     <div class="container">
+
         <div class="book-list">
-            {# <div class="header"></div> #}
         </div>
+
         <div class="text-list">
             <div class="new-book hidden">
                 <div class="cont">
@@ -20,11 +20,28 @@
                     <button class="btn cancel new-book-btn-cancel">Cancel</button>
                 </div>
             </div>
+
             <div class="book hidden">
                 <div class="cont">
                     <div class="header book-name"></div>
-                    <button class="btn delete book-btn-delete">Delete</button>
+                    {# <input class="name hidden book-rename-input"></input> #}
+                    <input class="name hidden book-rename-input" placeholder='Type new name. Saves automatically after 3 sec.'></input>
+                    <button class="btn rename book-btn-rename"> 🏷️ </button>
+                    <button class="btn delete book-btn-delete"> 🚮 </button>
                     <button class="btn yes-delete book-btn-yes-delete hidden">YES, DELETE</button>
+                </div>
+            </div>
+
+            <div class="texts texts-cont">&lt;-- select a book...
+            </div>
+
+            <div class="add-text">
+                <div class="cont add-text-main-cont hidden">
+                    <div class="add add-text-plus">+ add text...</div>
+                    <div class="cont add-text-input-cont hidden">
+                        <input class="chapter add-chapter-input" placeholder='Type chapter name...'></input>
+                        <textarea class="text add-text-input" placeholder='Paste text here. Saves automatically after 3 sec.'></textarea>
+                    </div>
                 </div>
             </div>
         </div>
