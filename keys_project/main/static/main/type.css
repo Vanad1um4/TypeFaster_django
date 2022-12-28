@@ -1,0 +1,131 @@
+/* === TYPING AREA ========================================================= */
+
+/* === MODAL CONFIRM WINDOW ================================================ */
+
+.confirm-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 150px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+}
+.confirm-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    width: min-content;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.2s;
+    white-space: nowrap;
+}
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0px; opacity:1}
+}
+.confirm-header {
+    padding: 2px 16px;
+    font-size: 200%;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+}
+.confirm-body > .confirm-text {
+    padding: 2px 16px;
+    font-size: 150%;
+}
+.confirm-btns > .confirm-yes, .confirm-no {
+    display: inline-block;
+    padding: 2px 22px;
+    font-size: 200%;
+    font-weight: bold;
+    cursor: pointer;
+}
+.confirm-btns > .confirm-yes {
+    background-color: #5cb85c;
+}
+.confirm-btns > .confirm-no {
+    background-color: red;
+    color: white;
+}
+
+/* === MODAL CONFIRM WINDOW ================================================ */
+
+.wait-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 0px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+}
+.wait-message {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 200%;
+    font-weight: bold;
+    margin: auto;
+    padding: 0;
+    width: min-content;
+    height: 100%;
+    animation-name: animateappear;
+    animation-duration: 0.5s;
+    white-space: nowrap;
+}
+@keyframes animateappear {
+  from {opacity:0}
+  to {opacity:1}
+}
+
+/* === ACTUAL TYPING ======================================================= */
+
+.cpm, .wpm, .acc {
+    display: inline-block;
+    font-weight: bold;
+    user-select: none;
+    font-size: 200%;
+    padding-left: 15px;
+    padding-right: 15px;
+
+}
+.main-text > .paragraph {
+    /* font-family: Courier; */
+    font-family: monospace;
+    font-weight: bold;
+    user-select: none;
+    font-size: 200%;
+    padding: 7px 15px;
+    /* padding-left: 15px; */
+    /* padding-right: 15px; */
+}
+
+.neutral {
+    /* background-color: LightGrey; */
+    /* background-color: white; */
+}
+.current {
+    background-color: LightGrey;
+}
+.correct {
+    /* background-color: LightGreen; */
+    color: var(--grey5);
+}
+.wrong {
+    /* background-color: PaleVioletRed; */
+    /* color: var(--grey9); */
+    background-color: red;
+    color: white;
+}

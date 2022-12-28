@@ -58,6 +58,9 @@ def db_rename_book(book_name, book_id, user_id):
 def db_delete_book(book_id, user_id):
     try:
         with connection.cursor() as c:
+            sql = 'delete from texts where book_id=%s and user_id=%s;'
+            values = (book_id, user_id,)
+            c.execute(sql, values)
             sql = 'delete from books where id=%s and user_id=%s;'
             values = (book_id, user_id,)
             c.execute(sql, values)
@@ -90,6 +93,46 @@ def db_create_text(book_id, user_id, chapter, text, stats):
         with connection.cursor() as c:
             sql = 'insert into texts (book_id, user_id, chapter, text, stats) values (%s, %s, %s, %s, %s);'
             values = (book_id, user_id, chapter, text, stats)
+            c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_batch_create_texts(book_id, user_id, chapter, texts_list):
+    try:
+        with connection.cursor() as c:
+            for text in texts_list:
+                sql = 'insert into texts (book_id, user_id, chapter, text, stats) values (%s, %s, %s, %s, %s);'
+                values = (book_id, user_id, chapter, text, '')
+                c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+### TEXT FNs ##################################################################
+
+
+def db_get_a_text_with_stats(text_id, user_id):
+    try:
+        with connection.cursor() as c:
+            sql = 'select text, stats from texts where id=%s and user_id=%s;'
+            values = (text_id, user_id)
+            c.execute(sql, values)
+            res = dict_fetchall(c)
+            return ('success', res)
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_save_stats(text_id, user_id, stats):
+    try:
+        with connection.cursor() as c:
+            sql = 'update texts set stats=%s, done=%s where id=%s and user_id=%s;'
+            values = (stats, 't', text_id, user_id)
             c.execute(sql, values)
             return ('success', [])
     except Exception as exc:

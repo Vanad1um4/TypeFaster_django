@@ -12,6 +12,7 @@ const bookDelBtn = document.querySelector('.book-btn-delete')
 const bookYesDelBtn = document.querySelector('.book-btn-yes-delete')
 let currentBookId
 
+const loadingGif = document.querySelector('.loading')
 const textsMainCont = document.querySelector('.texts-cont')
 
 const addTextMainDiv = document.querySelector('.add-text-main-cont')
@@ -54,7 +55,7 @@ async function saveNewText() {
     await sleep(wait3sec)
     const newValue = addTextInput.value
     if (lastValue === newValue) {
-        if (lastValue.length > 0 && lastValue.length < 256) {
+        if (lastValue.length > 0) {
             const chapter = addChapterInput.value
             fetch(`/add_text/`,
             {
@@ -139,7 +140,7 @@ function addBookToList(id, name) {
 
     divBookCont.addEventListener("click", (event) => {
         bookClicked(event.target)
-
+        loadingGif.classList.remove('hidden')
         addTextMainDiv.classList.remove('hidden')
         addTextPlusDiv.classList.remove('hidden')
         addTextInputCont.classList.add('hidden')
@@ -178,6 +179,7 @@ function bookClicked(target) {
             } else if (result['result'] == 'failure') {
                 console.log('lol, not ok')
             }
+            loadingGif.classList.add('hidden')
         })
 }
 
@@ -222,6 +224,7 @@ function textsAndChaptersConstruct(texts) {
 
             const chapterTextCont = document.createElement('DIV')
             chapterTextCont.classList.add('chapter-text-cont')
+            chapterTextCont.setAttribute('id', 'text'+text['text_id']);
 
             const chapterTextText = document.createElement('DIV')
             const chapterTextDone = document.createElement('DIV')
@@ -240,10 +243,15 @@ function textsAndChaptersConstruct(texts) {
 
             chapterTextContHide.appendChild(chapterTextCont)
             chapterMainCont.appendChild(chapterTextContHide)
+
+            chapterTextCont.addEventListener("click", (event) => {
+                let id = event.target.id.replace('text', '')
+                window.location.href = '/type/' + id
+            })
         }
         // console.log(texts)
         if (textSum === doneSum) {
-            chapterDone.textContent = 'Done ✅'
+            chapterDone.textContent = `Done ${doneSum} out of ${textSum} ✅`
             // console.log(chapterMainCont.childNodes)
             for (let i=1; i<chapterMainCont.childNodes.length; i++) {
                 chapterMainCont.childNodes[i].classList.toggle('hidden')
@@ -252,10 +260,10 @@ function textsAndChaptersConstruct(texts) {
             chapterDone.textContent = `Done ${doneSum} out of ${textSum} 🟡`
             keepOneMoreOpen++
         } else if (keepOneMoreOpen === 0) {
-            chapterDone.textContent = 'Not done ❌'
+            chapterDone.textContent = `Done ${doneSum} out of ${textSum}  `
             keepOneMoreOpen++
         } else {
-            chapterDone.textContent = 'Not done ❌'
+            chapterDone.textContent = `Done ${doneSum} out of ${textSum} ❌`
             for (let i=1; i<chapterMainCont.childNodes.length; i++) {
                 chapterMainCont.childNodes[i].classList.toggle('hidden')
             }
