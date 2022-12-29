@@ -1,19 +1,17 @@
-/* === TYPING AREA ========================================================= */
-
 /* === MODAL CONFIRM WINDOW ================================================ */
 
 .confirm-modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 150px; /* Location of the box */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 150px;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.7);
 }
 .confirm-content {
     position: relative;
@@ -56,20 +54,21 @@
     color: white;
 }
 
-/* === MODAL CONFIRM WINDOW ================================================ */
+
+/* === MODAL WAITING WINDOW ================================================ */
 
 .wait-modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 0px; /* Location of the box */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 0px;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.7);
 }
 .wait-message {
     display: flex;
@@ -89,6 +88,58 @@
   from {opacity:0}
   to {opacity:1}
 }
+
+
+
+/* === MODAL COMPLETE WINDOW =============================================== */
+
+.hidden {
+    display: none;
+}
+.complete-modal {
+    position: fixed;
+    z-index: 1;
+    padding-top: 150px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.7);
+}
+.complete-content {
+    position: relative;
+    background-color: #a4ffd5;
+    margin: auto;
+    padding: 10px;
+    width: min-content;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.2s;
+    white-space: nowrap;
+}
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0px; opacity:1}
+}
+.complete-header {
+    padding: 2px 16px;
+    font-size: 200%;
+    font-weight: bold;
+    color: #0e8b00;
+    text-align: center;
+    margin-bottom: 5px;
+}
+.complete-body > .complete-text {
+    padding: 2px 16px;
+    font-size: 150%;
+    font-weight: bold;
+    color: #0e8b00;
+}
+
+
+
 
 /* === ACTUAL TYPING ======================================================= */
 

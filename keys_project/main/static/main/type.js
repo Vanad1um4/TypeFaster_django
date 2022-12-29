@@ -4,7 +4,7 @@ const wpmDiv = document.querySelector('div.wpm')
 const accDiv = document.querySelector('div.acc')
 const csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 let statsDB = {}
-const [charCount, wordCount, charsPerWord, text_id, complete] = textConstruct()
+const [charCount, wordCount, charsPerWord, text_id, complete, nextTextId] = textConstruct()
 const strokes = `'""«»`
 const dashes = '-–'
 const dots = '.…'
@@ -134,13 +134,14 @@ function sendStatsBack() {
     accDiv.innerText = acc + '% accuracy'
 
     // statsDB['complete'] = true
-    statsDB['cpm'] = cpm
-    statsDB['wpm'] = wpm
-    statsDB['acc'] = acc
-    statsDB['chars'] = charCount
-    statsDB['words'] = wordCount
-    statsDB['errors'] = currErrors
-    statsDB['time'] = currTime
+    statsDB['args'] = {}
+    statsDB['args']['cpm'] = cpm
+    statsDB['args']['wpm'] = wpm
+    statsDB['args']['acc'] = acc
+    statsDB['args']['chars'] = charCount
+    statsDB['args']['words'] = wordCount
+    statsDB['args']['errors'] = currErrors
+    statsDB['args']['time'] = currTime
 
     fetch(`/type/${text_id}/return_stats/`,
     {
@@ -153,6 +154,26 @@ function sendStatsBack() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(statsDB)
+    })
+        .then(() => {
+            showCompleteDialogue()
+        })
+}
+
+
+function showCompleteDialogue() {
+    const completeWindow = document.querySelector('.complete-modal')
+    completeWindow.classList.remove('hidden')
+    document.addEventListener('keydown', function onPress(event) {
+        // console.log(event.key)
+        if (event.key === 'Enter') {
+            document.removeEventListener('keydown', onPress, false)
+            window.location.href = '/type/' + nextTextId
+        }
+        if (event.key === 'Escape') {
+            document.removeEventListener('keydown', onPress, false)
+            window.location.href = '/my_library/'
+        }
     })
 }
 
@@ -262,5 +283,5 @@ function textConstruct() {
     }
     mainTextDiv.appendChild(newParagraph)
     console.log(statsDB)
-    return [text.length, wordCount, charsPerWord, data['id'], data['complete']]
+    return [text.length, wordCount, charsPerWord, data['id'], data['complete'], data['next']]
 }

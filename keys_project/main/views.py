@@ -59,7 +59,6 @@ def delete_book_ajax(request):
         return redirect('login')
     user_id = request.user.account.id
     data = json.loads(request.body)
-    # print(user_id, data)
     result = db_delete_book(data['book_id'], user_id)
     if result[0] == 'success':
         return HttpResponse(json.dumps({'result': 'success'}),  # pyright: ignore
@@ -76,13 +75,11 @@ def get_texts_ajax(request):
         return redirect('login')
     user_id = request.user.account.id
     data = json.loads(request.body)
-    # print(user_id, data)
     result = db_get_texts(data['book_id'], user_id)
     texts = []
     chapter = ''
     k = -1
     for row in result[1]:
-        print(row)
         if row['chapter'] != chapter:
             k += 1
             chapter = row['chapter']
@@ -90,19 +87,28 @@ def get_texts_ajax(request):
         text = row['text']
         if len(text) > 33:
             text = text[:33] + '...'
-        texts[k][chapter].append({'text_id': row['id'], 'text_preview': text, 'done': row['done']})
+        stats_args = json.loads(row['stats_args'])
+        print(stats_args)
+        cpm = 0
+        wpm = 0
+        acc = 0.00
+        chars = 0
+        words = 0
+        time = 0
+        errors = 0
 
-        # if row['chapter'] not in chapters:
-        #     chapters.append(row['chapter'])
-        #     k += 1
-        #     texts[k] = []
-        # texts[k].append({'text_id': row['id'], 'text_preview': row['text'][:33] + '...', 'done': row['done']})
-
-    # print(texts)
-    # print(chapters)
+        if stats_args:
+            cpm = stats_args['cpm']
+            wpm = stats_args['wpm']
+            acc = stats_args['acc']
+            chars = stats_args['chars']
+            words = stats_args['words']
+            time = stats_args['time']
+            errors = stats_args['errors']
+        texts[k][chapter].append({'text_id': row['id'], 'text_preview': text, 'done': row['done'],
+                                  'cpm': cpm, 'wpm': wpm, 'acc': acc, 'chars': chars, 'words': words, 'time': time, 'errors': errors})
 
     if result[0] == 'success':
-        # if True:
         return HttpResponse(json.dumps({'result': 'success', 'data': {'texts': texts}}),  # pyright: ignore
                             content_type='application/json; charset=utf-8')
     else:
@@ -115,10 +121,10 @@ def add_text_ajax(request):
         return redirect('login')
     user_id = request.user.account.id
     data = json.loads(request.body)
-    # print(user_id, data)
     text = data['text'].replace('\n\n', '\n')
     texts_list = []
     while text:
+        # line_break_pos = text.find('\n', 1000)
         line_break_pos = text.find('\n', 100)
         if line_break_pos != -1:
             texts_list.append(text[:line_break_pos])
@@ -126,12 +132,39 @@ def add_text_ajax(request):
         if line_break_pos == -1:
             texts_list.append(text)
             text = ''
-    # print(texts_list)
-    # for text in texts_list:
-    #     print(text)
     result = db_batch_create_texts(data['book_id'], user_id, data['chapter'], texts_list)
     if result[0] == 'success':
+        return HttpResponse(json.dumps({'result': 'success'}),  # pyright: ignore
+                            content_type='application/json; charset=utf-8')
+    else:
+        return HttpResponse(json.dumps({'result': 'failure'}),  # pyright: ignore
+                            content_type='application/json; charset=utf-8')
+
+
+def delete_texts_by_chapter_ajax(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    user_id = request.user.account.id
+    data = json.loads(request.body)
+    # print(data)
+    result = db_del_texts_by_chapter(data['chapter_name'], user_id)
+    if result[0] == 'success':
         # if True:
+        return HttpResponse(json.dumps({'result': 'success'}),  # pyright: ignore
+                            content_type='application/json; charset=utf-8')
+    else:
+        return HttpResponse(json.dumps({'result': 'failure'}),  # pyright: ignore
+                            content_type='application/json; charset=utf-8')
+
+
+def delete_text_by_id_ajax(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    user_id = request.user.account.id
+    data = json.loads(request.body)
+    # print(data)
+    result = db_del_text_by_id(data['text_id'], user_id)
+    if result[0] == 'success':
         return HttpResponse(json.dumps({'result': 'success'}),  # pyright: ignore
                             content_type='application/json; charset=utf-8')
     else:
@@ -155,15 +188,21 @@ def type(request, text_id):
     errors = 0
     time = 0
     text = ''
+    prev = 0
+    next = 0
 
     result = db_get_a_text_with_stats(text_id, user_id)
     print(result)
 
     if result[0] == 'success':
         text = result[1][0]['text']
-        stats = result[1][0]['stats']
+        stats = json.loads(result[1][0]['stats_args'])
+        prev = result[1][0]['prev_text_id']
+        next = result[1][0]['next_text_id']
+        # print(stats)
+        # print(bool(stats))
+        # try:
         if stats:
-            stats = json.loads(stats)
             complete = True
             cpm = stats['cpm']
             wpm = stats['wpm']
@@ -172,6 +211,8 @@ def type(request, text_id):
             words = stats['words']
             errors = stats['errors']
             time = stats['time']
+        # except:
+        #     pass
 
     return render(request, 'main/type.html', {'data': {
         'complete': complete,
@@ -183,37 +224,24 @@ def type(request, text_id):
         'errors': errors,
         'time': time,
         'text': text,
-        'id': text_id
+        'id': text_id,
+        'prev': prev,
+        'next': next,
     }})
 
 
-def return_stats(request, text_id):
+def return_stats_ajax(request, text_id):
     if not request.user.is_authenticated:
         return redirect('login')
-    # data = json.loads(request.body)
-    # print(json.dumps(data))
     user_id = request.user.account.id
-    stats = json.dumps(json.loads(request.body))
-    result = db_save_stats(text_id, user_id, stats)
-    # profile = request.user.profile
-    # text = Text.objects.get(id=text_id)
-    # try:
-    #     stats = TextStats.objects.get(text__id=text.id, user__id=profile.id)
-    # except Exception as e:
-    #     print(e)
-    #     stats = TextStats(text=text, user=profile)
-    # stats.complete = data['complete']
-    # stats.stats_string = data['stats']
-    # stats.cpm = data['cpm']
-    # stats.wpm = data['wpm']
-    # stats.acc = data['acc']
-    # stats.chars = data['chars']
-    # stats.words = data['words']
-    # stats.errors = data['errors']
-    # stats.time = data['time']
-    #
-    # stats.save()
-    return HttpResponse(json.dumps({'result': 'success'}),  # pyright: ignore
-                        content_type='application/json; charset=utf-8')
-    return HttpResponse(json.dumps({'result': 'failure'}),  # pyright: ignore
-                        content_type='application/json; charset=utf-8')
+    stats = json.loads(request.body)
+    # stats = json.dumps(json.loads(request.body))
+    print(stats['stats'], stats['args'])
+    result = db_save_stats(text_id, user_id, json.dumps(stats['stats']), json.dumps(stats['args']))
+    if result[0] == 'success':
+        # if True:
+        return HttpResponse(json.dumps({'result': 'success'}),  # pyright: ignore
+                            content_type='application/json; charset=utf-8')
+    else:
+        return HttpResponse(json.dumps({'result': 'failure'}),  # pyright: ignore
+                            content_type='application/json; charset=utf-8')

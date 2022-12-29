@@ -9,8 +9,6 @@
 
 {% block content %}
 
-    {# <h2>Type area</h2> #}
-
     <div class="confirm-modal">
         <div class="confirm-content">
             <div class="confirm-header">
@@ -29,6 +27,18 @@
 
     <div class="wait-modal">
         <div class="wait-message">- 5 seconds. Countdown paused. Continue typing to resume.</div>
+    </div>
+
+    <div class="complete-modal hidden">
+        <div class="complete-content">
+            <div class="complete-header">
+                <div>Completed</div>
+            </div>
+            <div class="complete-body">
+                <div class="complete-text">Hit 'Enter' to begin next text</div>
+                <div class="complete-text">or 'ESC' to return to library</div>
+            </div>
+        </div>
     </div>
 
     <div class="stats">

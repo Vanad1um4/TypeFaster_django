@@ -24,7 +24,7 @@ const addTextInput = document.querySelector('.add-text-input')
 const csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 const data = JSON.parse(document.getElementById('data').textContent)
 let books = {}
-console.log(data)
+// console.log(data)
 const wain1sec = 1000
 const wait3sec = 3000
 
@@ -67,16 +67,16 @@ async function saveNewText() {
                 },
                 body: JSON.stringify({'book_id': currentBookId, 'chapter': chapter, 'text': lastValue})
             })
-                .then(response => response.json())
-                .then(result => {
-                    if (result['result'] == 'success') {
-                        console.log('lol, ok')
-                    } else if (result['result'] == 'failure') {
-                        console.log('lol, not ok')
-                    }
-                })
+                // .then(response => response.json())
+                // .then(result => {
+                //     if (result['result'] == 'success') {
+                //         console.log('lol, ok')
+                //     } else if (result['result'] == 'failure') {
+                //         console.log('lol, not ok')
+                //     }
+                // })
                 // .then(await sleep(wain1sec))
-                // .then(() => { window.location.reload() })
+                .then(() => { window.location.reload() })
         } else {
             console.log('nope')
         }
@@ -138,19 +138,17 @@ function addBookToList(id, name) {
     divBookCont.appendChild(divBook)
     divBookList.appendChild(divBookCont)
 
-    divBookCont.addEventListener("click", (event) => {
-        bookClicked(event.target)
-        loadingGif.classList.remove('hidden')
-        addTextMainDiv.classList.remove('hidden')
-        addTextPlusDiv.classList.remove('hidden')
-        addTextInputCont.classList.add('hidden')
-    })
+    divBookCont.addEventListener("click", (event) => { bookClicked(event.target) })
 }
 
 
 function bookClicked(target) {
     let bookId = parseInt(target.getAttribute('id').replace('book', ''))
     currentBookId = bookId
+    loadingGif.classList.remove('hidden')
+    addTextMainDiv.classList.remove('hidden')
+    addTextPlusDiv.classList.remove('hidden')
+    addTextInputCont.classList.add('hidden')
     bookYesDelBtn.classList.add('hidden')
     newBookDiv.classList.add('hidden')
     bookDiv.classList.remove('hidden')
@@ -173,11 +171,11 @@ function bookClicked(target) {
         .then(response => response.json())
         .then(result => {
             if (result['result'] == 'success') {
-                console.log('lol, ok')
-                // console.log(result['data']['texts'])
+                // console.log('lol, ok')
+                console.log(result['data']['texts'])
                 textsAndChaptersConstruct(result['data']['texts'])
             } else if (result['result'] == 'failure') {
-                console.log('lol, not ok')
+                // console.log('lol, not ok')
             }
             loadingGif.classList.add('hidden')
         })
@@ -186,6 +184,7 @@ function bookClicked(target) {
 function textsAndChaptersConstruct(texts) {
     let keepOneMoreOpen = 0
     for (let chapt of texts) {
+        // console.log(chapt)
         // console.log(Object.keys(chapt)[0])
         const chapterMainCont = document.createElement('DIV')
         chapterMainCont.classList.add('chapter-cont')
@@ -195,13 +194,39 @@ function textsAndChaptersConstruct(texts) {
 
         const chapterName = document.createElement('DIV')
         const chapterDone = document.createElement('DIV')
+        const chapterCPM = document.createElement('DIV')
+        const chapterACC = document.createElement('DIV')
+        const chapterDelBtn = document.createElement('BUTTON')
+        const chapterYesDelBtn = document.createElement('BUTTON')
+
         chapterName.classList.add('chapter-name')
         chapterDone.classList.add('chapter-done')
+        chapterYesDelBtn.classList.add('hidden')
 
         chapterName.textContent = Object.keys(chapt)[0]
+        chapterDelBtn.textContent = '🚮'
+        chapterYesDelBtn.textContent = 'YES, DELETE!'
+
         chapterHeadCont.appendChild(chapterName)
         chapterHeadCont.appendChild(chapterDone)
+        chapterHeadCont.appendChild(chapterCPM)
+        chapterHeadCont.appendChild(chapterACC)
+        chapterHeadCont.appendChild(chapterDelBtn)
+        chapterHeadCont.appendChild(chapterYesDelBtn)
 
+        chapterDelBtn.addEventListener("click", (event) => {
+            chapterYesDelBtn.classList.remove('hidden')
+            event.stopPropagation()
+        })
+
+        chapterYesDelBtn.addEventListener("click", (event) => {
+            const chapterName = event.target.parentElement.childNodes[0].textContent
+            // console.log(chapterName)
+            event.stopPropagation()
+            if (chapterName.length > 0) {
+                deleteTextsByChapter(chapterName)
+            }
+        })
 
         chapterHeadCont.addEventListener("click", (event) => {
             // console.log(event.target)
@@ -213,9 +238,16 @@ function textsAndChaptersConstruct(texts) {
         })
 
         chapterMainCont.appendChild(chapterHeadCont)
+
         let textSum = 0
         let doneSum = 0
+
+        let charsSum = 0
+        let timeSum = 0
+        let errorsSum = 0
+
         for (let text of chapt[Object.keys(chapt)[0]]) {
+            // console.log(chapt[Object.keys(chapt)[0]])
             textSum++
             // console.log(Object.keys(chapt)[0], text)
             // console.log(text['text_preview'])
@@ -228,26 +260,74 @@ function textsAndChaptersConstruct(texts) {
 
             const chapterTextText = document.createElement('DIV')
             const chapterTextDone = document.createElement('DIV')
+            const chapterTextCPM = document.createElement('DIV')
+            const chapterTextACC = document.createElement('DIV')
+            const chapterTextDelBtn = document.createElement('BUTTON')
+            const chapterTextYesDelBtn = document.createElement('BUTTON')
+
             chapterTextText.classList.add('chapter-text-text')
             chapterTextDone.classList.add('chapter-text-done')
-            chapterTextText.textContent = text['text_preview']
+            chapterTextYesDelBtn.classList.add('hidden')
+
             if (text['done'] == true) {
                 doneSum++
-                chapterTextDone.textContent = '✅'
+                chapterTextDone.textContent = '✅ | '
             } else {
                 chapterTextDone.textContent = '❌'
             }
 
+            chapterTextText.textContent = text['text_preview']
+
+            if (text['chars'] > 0) {
+                const chars = text['chars']
+                const time = text['time']
+                const errors = text['errors']
+                charsSum += chars
+                timeSum += time
+                errorsSum += errors
+                const cpm = Math.round(chars / time * 60 * 1000)
+                const acc = Math.round((1.0 - (errors / chars)) * 10000) / 100
+                chapterTextCPM.textContent = `${cpm} CPM | `
+                chapterTextACC.textContent = `${acc}% acc | `
+            }
+            chapterTextDelBtn.textContent = '🚮'
+            chapterTextYesDelBtn.textContent = 'YES, DELETE!'
+
             chapterTextCont.appendChild(chapterTextText)
             chapterTextCont.appendChild(chapterTextDone)
+            chapterTextCont.appendChild(chapterTextCPM)
+            chapterTextCont.appendChild(chapterTextACC)
+            chapterTextCont.appendChild(chapterTextDelBtn)
+            chapterTextCont.appendChild(chapterTextYesDelBtn)
 
             chapterTextContHide.appendChild(chapterTextCont)
             chapterMainCont.appendChild(chapterTextContHide)
 
+            chapterTextDelBtn.addEventListener("click", (event) => {
+                chapterTextYesDelBtn.classList.toggle('hidden')
+                event.stopPropagation()
+            })
+
+            chapterTextYesDelBtn.addEventListener("click", (event) => {
+                // console.log(event.target.parentElement)
+                // console.log(id)
+                try {
+                    const id = event.target.parentElement.id.replace('text', '')
+                    deleteTextsById(id)
+                } catch (err) { console.error(err) }
+                event.stopPropagation()
+            })
+
             chapterTextCont.addEventListener("click", (event) => {
-                let id = event.target.id.replace('text', '')
+                const id = event.target.id.replace('text', '')
                 window.location.href = '/type/' + id
             })
+        }
+        if (charsSum > 0) {
+            const cpm = Math.round(charsSum / timeSum * 60 * 1000)
+            const acc = Math.round((1.0 - (errorsSum / charsSum)) * 10000) / 100
+            chapterCPM.textContent = `${cpm} CPM | `
+            chapterACC.textContent = `${acc}% acc | `
         }
         // console.log(texts)
         if (textSum === doneSum) {
@@ -274,6 +354,54 @@ function textsAndChaptersConstruct(texts) {
 }
 
 
+function deleteTextsByChapter(chapter_str) {
+    fetch(`/delete_texts_by_chapter/`,
+    {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'chapter_name': chapter_str})
+    })
+        // .then(response => response.json())
+        // .then(result => {
+        //     if (result['result'] == 'success') {
+        //         console.log('lol, ok')
+        //     } else if (result['result'] == 'failure') {
+        //         console.log('lol, not ok')
+        //     }
+        // })
+        // .then(await sleep(wain1sec))
+        .then(() => { window.location.reload() })
+}
+
+
+function deleteTextsById(text_id) {
+    fetch(`/delete_text_by_id/`,
+    {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({'text_id': text_id})
+    })
+        // .then(response => response.json())
+        // .then(result => {
+        //     if (result['result'] == 'success') {
+        //         console.log('lol, ok')
+        //     } else if (result['result'] == 'failure') {
+        //         console.log('lol, not ok')
+        //     }
+        // })
+        // .then(await sleep(wain1sec))
+        .then(() => { window.location.reload() })
+}
+
+
 function addNewBookBtn() {
     const divAddBookCont = document.createElement('DIV')
     const divBook = document.createElement('DIV')
@@ -289,13 +417,15 @@ function addNewBookBtn() {
     divAddBookCont.addEventListener("click", () => {
         newBookDiv.classList.toggle('hidden')
         bookDiv.classList.add('hidden')
+        while (textsMainCont.firstChild) { textsMainCont.firstChild.remove() }
+        addTextMainDiv.classList.add('hidden')
     });
 }
 
 
 async function addNewBookBtnClicked() {
     const bookName = newBookInput.value
-    console.log(bookName.length)
+    // console.log(bookName.length)
     if (bookName.length > 0 && bookName.length < 256) {
         fetch(`/add_book/`,
         {

@@ -1,5 +1,6 @@
 from django.db import connection
 from .log import *
+import json
 
 err_logger = get_err_logger(f'{__name__}', True)
 
@@ -78,23 +79,12 @@ def db_delete_book(book_id, user_id):
 def db_get_texts(book_id, user_id):
     try:
         with connection.cursor() as c:
-            sql = 'select * from texts where book_id=%s and user_id=%s order by id;'
+            sql = 'select id, chapter, text, done, stats_args from texts where book_id=%s and user_id=%s order by id;'
             values = (book_id, user_id)
             c.execute(sql, values)
             res = dict_fetchall(c)
+            # print(res)
             return ('success', res)
-    except Exception as exc:
-        err_logger.exception(exc)
-        return ('failure', [])
-
-
-def db_create_text(book_id, user_id, chapter, text, stats):
-    try:
-        with connection.cursor() as c:
-            sql = 'insert into texts (book_id, user_id, chapter, text, stats) values (%s, %s, %s, %s, %s);'
-            values = (book_id, user_id, chapter, text, stats)
-            c.execute(sql, values)
-            return ('success', [])
     except Exception as exc:
         err_logger.exception(exc)
         return ('failure', [])
@@ -104,8 +94,8 @@ def db_batch_create_texts(book_id, user_id, chapter, texts_list):
     try:
         with connection.cursor() as c:
             for text in texts_list:
-                sql = 'insert into texts (book_id, user_id, chapter, text, stats) values (%s, %s, %s, %s, %s);'
-                values = (book_id, user_id, chapter, text, '')
+                sql = 'insert into texts (book_id, user_id, chapter, text, stats_raw, stats_args) values (%s, %s, %s, %s, %s, %s);'
+                values = (book_id, user_id, chapter, text, json.dumps(''), json.dumps(''))
                 c.execute(sql, values)
             return ('success', [])
     except Exception as exc:
@@ -118,21 +108,63 @@ def db_batch_create_texts(book_id, user_id, chapter, texts_list):
 def db_get_a_text_with_stats(text_id, user_id):
     try:
         with connection.cursor() as c:
-            sql = 'select text, stats from texts where id=%s and user_id=%s;'
+            sql = 'select book_id from texts where id=%s and user_id=%s;'
             values = (text_id, user_id)
             c.execute(sql, values)
-            res = dict_fetchall(c)
-            return ('success', res)
+            book_id = c.fetchone()[0]
+
+            sql = 'select id from texts where book_id=%s and user_id=%s order by id;'
+            values = (book_id, user_id)
+            c.execute(sql, values)
+            text_ids = [row[0] for row in c.fetchall()]
+            prev_text_id = None
+            this_index = text_ids.index(text_id)
+            next_text_id = None
+
+            if this_index > 0:
+                prev_text_id = text_ids[this_index-1]
+            if this_index < len(text_ids)-1:
+                next_text_id = text_ids[this_index+1]
+
+            sql = 'select text, stats_args from texts where id=%s and user_id=%s;'
+            values = (text_id, user_id)
+            c.execute(sql, values)
+            res = dict_fetchall(c)[0]
+            return ('success', [{'text': res['text'], 'stats_args': res['stats_args'], 'prev_text_id': prev_text_id, 'next_text_id': next_text_id}])
     except Exception as exc:
         err_logger.exception(exc)
         return ('failure', [])
 
 
-def db_save_stats(text_id, user_id, stats):
+def db_save_stats(text_id, user_id, stats_raw, stats_args):
     try:
         with connection.cursor() as c:
-            sql = 'update texts set stats=%s, done=%s where id=%s and user_id=%s;'
-            values = (stats, 't', text_id, user_id)
+            sql = 'update texts set stats_raw=%s, stats_args=%s, done=%s where id=%s and user_id=%s;'
+            values = (stats_raw, stats_args, 't', text_id, user_id)
+            c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_del_texts_by_chapter(chapter_str, user_id):
+    try:
+        with connection.cursor() as c:
+            sql = 'delete from texts where chapter=%s and user_id=%s;'
+            values = (chapter_str, user_id)
+            c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_del_text_by_id(text_id, user_id):
+    try:
+        with connection.cursor() as c:
+            sql = 'delete from texts where id=%s and user_id=%s;'
+            values = (text_id, user_id)
             c.execute(sql, values)
             return ('success', [])
     except Exception as exc:
