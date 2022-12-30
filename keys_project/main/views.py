@@ -6,19 +6,22 @@ import json
 
 
 def home(request):
-    if request.user.is_authenticated:
-        return render(request, 'main/index.html')
-        # return redirect('home')
-    return redirect('login')
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'main/index.html')
 
 
 def my_library(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     user_id = request.user.account.id
     result = db_return_users_books(user_id)[1]
     return render(request, 'main/my_library.html', {'data': result})
 
 
 def type_no_txt(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     return render(request, 'main/type_no_txt.html')
 
 
