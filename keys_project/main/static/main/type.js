@@ -5,7 +5,7 @@ const accDiv = document.querySelector('div.acc')
 const csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 let statsDB = {}
 const [charCount, wordCount, charsPerWord, text_id, complete, nextTextId] = textConstruct()
-const strokes = `'""«»`
+const strokes = `'""«»’`
 const dashes = '-–'
 const dots = '.…'
 const spaces = ' \xa0'

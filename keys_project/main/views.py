@@ -88,10 +88,10 @@ def get_texts_ajax(request):
             chapter = row['chapter']
             texts.append({chapter: []})
         text = row['text']
-        if len(text) > 33:
-            text = text[:33] + '...'
+        if len(text) > 45:
+            text = text[:45] + '...'
         stats_args = json.loads(row['stats_args'])
-        print(stats_args)
+        # print(stats_args)
         cpm = 0
         wpm = 0
         acc = 0.00
@@ -195,7 +195,7 @@ def type(request, text_id):
     next = 0
 
     result = db_get_a_text_with_stats(text_id, user_id)
-    print(result)
+    # print(result)
 
     if result[0] == 'success':
         text = result[1][0]['text']
@@ -239,7 +239,7 @@ def return_stats_ajax(request, text_id):
     user_id = request.user.account.id
     stats = json.loads(request.body)
     # stats = json.dumps(json.loads(request.body))
-    print(stats['stats'], stats['args'])
+    # print(stats['stats'], stats['args'])
     result = db_save_stats(text_id, user_id, json.dumps(stats['stats']), json.dumps(stats['args']))
     if result[0] == 'success':
         # if True:

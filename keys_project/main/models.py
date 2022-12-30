@@ -83,7 +83,6 @@ def db_get_texts(book_id, user_id):
             values = (book_id, user_id)
             c.execute(sql, values)
             res = dict_fetchall(c)
-            # print(res)
             return ('success', res)
     except Exception as exc:
         err_logger.exception(exc)
