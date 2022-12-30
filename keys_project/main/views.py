@@ -125,7 +125,7 @@ def add_text_ajax(request):
     texts_list = []
     while text:
         # line_break_pos = text.find('\n', 1000)
-        line_break_pos = text.find('\n', 100)
+        line_break_pos = text.find('\n', 1000)
         if line_break_pos != -1:
             texts_list.append(text[:line_break_pos])
             text = text[line_break_pos+1:]
