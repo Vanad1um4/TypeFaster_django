@@ -124,10 +124,15 @@ def add_text_ajax(request):
         return redirect('login')
     user_id = request.user.account.id
     data = json.loads(request.body)
-    text = data['text'].replace('\n\n', '\n')
+
+    text = data['text']
+    while '\n\n' in text:
+        text = text.replace('\n\n', '\n')
+    while '  ' in text:
+        text = text.replace('  ', ' ')
+
     texts_list = []
     while text:
-        # line_break_pos = text.find('\n', 1000)
         line_break_pos = text.find('\n', 1000)
         if line_break_pos != -1:
             texts_list.append(text[:line_break_pos])
