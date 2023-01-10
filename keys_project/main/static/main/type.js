@@ -5,7 +5,9 @@ const accDiv = document.querySelector('div.acc')
 const csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 let statsDB = {}
 const [charCount, wordCount, charsPerWord, text_id, complete, nextTextId] = textConstruct()
-const strokes = `'""«»’`
+// const strokes = `'""«»’`
+const strokes = `'‘’`;
+const quotes = `"«»“”`;
 const dashes = '-–'
 const dots = '.…'
 const spaces = ' \xa0'
@@ -90,9 +92,12 @@ function keyPressedValidate(i, key) {
     // console.log(syl)
     let span = document.querySelector(`span[id="n${i.toString()}"]`)
     span.classList.remove('correct', 'wrong', 'current', 'neutral')
-    // different quotes
+    // different strokes
     if ((strokes.includes(key) || key === '`') && (strokes.includes(syl) || syl === '`')) {
-        span.classList.add('correct')
+        span.classList.add('correct');
+    // different quotes
+    } else if (quotes.includes(key) && quotes.includes(syl)) {
+        span.classList.add('correct');
     // different dashes
     } else if (dashes.includes(key) && dashes.includes(syl)) {
         span.classList.add('correct')
