@@ -1,0 +1,19 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/stats.css' %}">
+{% endblock css %}
+
+{% block content %}
+    {# some content goes here #}
+    <div id='kb-freq'></div>
+    <div id='kb-err'></div>
+    {% csrf_token %}
+    {{ data|json_script:'data' }}
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'main/stats.js' %}" defer></script>
+{% endblock js %}
+

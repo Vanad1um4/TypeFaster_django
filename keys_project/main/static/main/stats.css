@@ -1,0 +1,93 @@
+#kb-freq {
+    margin-bottom: 50px;
+}
+
+
+#.row1 {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 7px;
+}
+#.row1 > .key-cont {
+}
+#.row1 > .key-cont > .key {
+}
+
+#.row2 {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 7px;
+    margin-left: 20px;
+}
+#.row2 > .key-cont {
+}
+#.row2 > .key-cont > .key {
+}
+
+#.row3 {
+    display: flex;
+    gap: 7px;
+    margin-left: 57px;
+}
+#.row3 > .key-cont {
+}
+#.row3 > .key-cont > .key {
+}
+
+
+.row1 {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 7px;
+}
+.row1 > .key-cont {
+}
+.row1 > .key-cont > .key {
+}
+
+.row2 {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 7px;
+    margin-left: 20px;
+}
+.row2 > .key-cont {
+}
+.row2 > .key-cont > .key {
+}
+
+.row3 {
+    display: flex;
+    gap: 7px;
+    margin-left: 57px;
+}
+.row3 > .key-cont {
+}
+.row3 > .key-cont > .key {
+}
+
+
+#.row > .key-cont {
+    width: 63px;
+    height: 63px;
+    border: 2px solid green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#.row > .key-cont > .key {
+    font-size: 34px;
+    font-weight: bold;
+}
+.row > .key-cont {
+    width: 63px;
+    height: 63px;
+    border: 2px solid green;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.row > .key-cont > .key {
+    font-size: 34px;
+    font-weight: bold;
+}

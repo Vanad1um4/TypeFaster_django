@@ -135,10 +135,22 @@ def db_get_a_text_with_stats(text_id, user_id):
         return ('failure', [])
 
 
-def db_save_stats(text_id, user_id, stats_raw, stats_args):
+# def db_save_stats(text_id, user_id, stats_raw, stats_args):
+#     try:
+#         with connection.cursor() as c:
+#             sql = 'update texts set stats_raw=%s, stats_args=%s, done=%s where id=%s and user_id=%s;'
+#             values = (stats_raw, stats_args, 't', text_id, user_id)
+#             c.execute(sql, values)
+#             return ('success', [])
+#     except Exception as exc:
+#         err_logger.exception(exc)
+#         return ('failure', [])
+
+
+def db_save_stats_new(text_id, user_id, stats_raw, stats_args):
     try:
         with connection.cursor() as c:
-            sql = 'update texts set stats_raw=%s, stats_args=%s, done=%s where id=%s and user_id=%s;'
+            sql = 'update texts set stats_raw_str=%s, stats_args=%s, done=%s where id=%s and user_id=%s;'
             values = (stats_raw, stats_args, 't', text_id, user_id)
             c.execute(sql, values)
             return ('success', [])
@@ -169,3 +181,56 @@ def db_del_text_by_id(text_id, user_id):
     except Exception as exc:
         err_logger.exception(exc)
         return ('failure', [])
+
+
+### STATS FNs #################################################################
+
+def db_return_all_text_stats(user_id):
+    try:
+        with connection.cursor() as c:
+            sql = '''select stats_raw_str from texts where user_id=%s and done='t' order by id;'''
+            values = (user_id,)
+            c.execute(sql, values)
+            res = c.fetchall()
+            return ('success', res)
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+# def db_return_one_text_stats(user_id, text_id):
+#     try:
+#         with connection.cursor() as c:
+#             sql = 'select stats_raw from texts where user_id=%s and id=%s order by id;'
+#             values = (user_id, text_id)
+#             c.execute(sql, values)
+#             res = c.fetchall()
+#             return ('success', res)
+#     except Exception as exc:
+#         err_logger.exception(exc)
+#         return ('failure', [])
+#
+#
+# def db_return_one_text_stats2(user_id, text_id):
+#     try:
+#         with connection.cursor() as c:
+#             sql = 'select stats_raw_str from texts where user_id=%s and id=%s order by id;'
+#             values = (user_id, text_id)
+#             c.execute(sql, values)
+#             res = c.fetchall()
+#             return ('success', res)
+#     except Exception as exc:
+#         err_logger.exception(exc)
+#         return ('failure', [])
+#
+#
+# def db_return_all_text_ids():
+#     try:
+#         with connection.cursor() as c:
+#             sql = 'select id from texts order by id;'
+#             c.execute(sql)
+#             res = c.fetchall()
+#             return ('success', res)
+#     except Exception as exc:
+#         err_logger.exception(exc)
+#         return ('failure', [])

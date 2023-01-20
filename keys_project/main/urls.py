@@ -16,9 +16,13 @@ urlpatterns = [
     path('delete_texts_by_chapter/', views.delete_texts_by_chapter_ajax),
     path('delete_text_by_id/', views.delete_text_by_id_ajax),
 
-    path('type/', views.type_no_txt, name='type_no_txt'),
-    path('type/<int:text_id>/', views.type),
+    path('type/<int:text_id>/', views.type_text),
     path('type/<int:text_id>/return_stats/', views.return_stats_ajax),
+
+    path('stats/', views.my_stats, name='stats'),
+
+    # path('test/<int:text_id>/', views.test_ajax),
+    # path('test2/', views.test2_ajax),
 
     path('', RedirectView.as_view(url='home/')),
 ]

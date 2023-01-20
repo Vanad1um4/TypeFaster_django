@@ -17,6 +17,7 @@ let currErrors = 0
 let timesMoreThanFiveSecs = 0
 let timeExclude = 0
 let timeoutID
+let pauseStartTime = 0
 // const charCount = tmpVar[0]
 // const wordCount = tmpVar[1]
 
@@ -46,13 +47,14 @@ function showConfirmation() {
         continueToTyping()
     }
     confirmNo.onclick = function() {
-        history.back()
+        window.location.href = '/my_library/'
     }
 }
 
 
 function continueToTyping() {
     document.addEventListener('keydown', function onPress(event) {
+    // console.log(pauseStartTime, timeExclude)
         // event.preventDefault()
         const key = event.key
         // console.log(key)
@@ -60,15 +62,15 @@ function continueToTyping() {
             event.preventDefault()
         }
         if ((key.toString().length === 1 || key === 'Enter') && step < charCount) {
-            hideWaitMessage()
             clearTimeout(timeoutID)
             timeoutID = setTimeout(showWaitMessage, 5000)
             keyPressedValidate(step, key)
+            hideWaitMessage(step)
             forwardProp(step)
             stats(step)
             step++
         } else if (key === 'Backspace' && step > 0) {
-            hideWaitMessage()
+            hideWaitMessage(step)
             clearTimeout(timeoutID)
             timeoutID = setTimeout(showWaitMessage, 5000)
             backwardProp(step)
@@ -88,6 +90,7 @@ function continueToTyping() {
 
 
 function keyPressedValidate(i, key) {
+    statsDB['stats'][i]['time'] = Date.now()
     const syl = statsDB['stats'][i]['txt']
     // console.log(syl)
     let span = document.querySelector(`span[id="n${i.toString()}"]`)
@@ -117,15 +120,17 @@ function keyPressedValidate(i, key) {
         statsDB['stats'][i]['error']++
         currErrors++
     }
-    statsDB['stats'][i]['time'] = Date.now()
 }
 
 
 function showWaitMessage() {
     waitDiv.style.display = 'block'
+    pauseStartTime = Date.now() - 5000
 }
-function hideWaitMessage() {
+function hideWaitMessage(i) {
     waitDiv.style.display = 'none'
+}
+function checkForPauseTime(i) {
 }
 
 
@@ -175,7 +180,8 @@ function showCompleteDialogue() {
             document.removeEventListener('keydown', onPress, false)
             window.location.href = '/type/' + nextTextId
         }
-        if (event.key === 'Escape') {
+        if (event.key === 'Backspace') {
+            console.log(event.key)
             document.removeEventListener('keydown', onPress, false)
             window.location.href = '/my_library/'
         }
@@ -221,27 +227,21 @@ function backwardProp(i) {
 
 
 function stats(i) {
-    let startTime = statsDB['stats'][0]['time']
-    let endTime = statsDB['stats'][i]['time']
-    let neighbourTime = 0
-    if (i > 0) {
-        neighbourTime = statsDB['stats'][i]['time'] - statsDB['stats'][i-1]['time']
+    if (pauseStartTime > 0) {
+        timeExclude += Date.now() - pauseStartTime
+        pauseStartTime = 0
     }
-    if (neighbourTime > 5000) {
-        timeExclude += neighbourTime
-    }
-    // console.log(neighbourTime)
-    // console.log(timeExclude)
-
-    currTime = endTime + 1 - startTime - timeExclude
-    cpm = Math.round(i/currTime*60*1000)
-    cpmDiv.innerText = cpm + ' cpm'
-
-    let mistakeCount = 0
     if (statsDB['stats'][i]['txt'] === ' ' || i === charCount-1) {
+        let startTime = statsDB['stats'][0]['time']
+        let endTime = statsDB['stats'][i]['time']
+        currTime = endTime + 1 - startTime - timeExclude
+        cpm = Math.round(i/currTime*60*1000)
+        cpmDiv.innerText = cpm + ' cpm'
+
         wpm = Math.round(cpm / charsPerWord)
         wpmDiv.innerText = wpm + ' wpm'
 
+        let mistakeCount = 0
         for (let j=0; j<i; j++) {
             mistakeCount += statsDB['stats'][j]['error']
         }
