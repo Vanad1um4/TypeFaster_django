@@ -85,7 +85,7 @@ def get_texts_ajax(request):
     chapter = ''
     k = -1
     for row in result[1]:
-        print(row)
+        # print(row)
         if row['chapter'] != chapter:
             k += 1
             chapter = row['chapter']
@@ -304,7 +304,7 @@ def my_stats(request):
         print(i, letters_dict[i])
         # print(i[0], i[1]['amt'])
         letters_list.append([i, letters_dict[i]['amt'], letters_dict[i]['err']])
-    print(letters_list)
+    # print(letters_list)
 
     max_freq = 0
     max_err = 0
@@ -322,7 +322,7 @@ def my_stats(request):
     data_freq_normalized = []
     for i in letters_list:
         data_freq_normalized.append([i[0], round(i[1] / freq_mult_factor), round(i[2] / err_mult_factor)])
-    print(data_freq_normalized)
+    # print(data_freq_normalized)
 
     data = []
     data.append(data_freq_normalized)
