@@ -21,6 +21,7 @@ urlpatterns = [
 
     path('stats/', views.my_stats, name='stats'),
 
+    path('set_options/', views.set_options_ajax),
     # path('test/<int:text_id>/', views.test_ajax),
     # path('test2/', views.test2_ajax),
 

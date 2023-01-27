@@ -29,6 +29,17 @@
                         <div class="stats menu-button {% if "stats" in request.path %}primary-url{% else %}secondary-url{% endif %}">
                             <a class="a-btn" href="{% url 'stats' %}">Statistics</a>
                         </div>
+                        <div class="stats menu-button secondary-url options-drop-down">
+                            <a class="a-btn">Options</a>
+                            <div class="options-content-hide">
+                                <div class="options-content-grid">
+                                    {# <div class="text">Dark theme</div> #}
+                                    {# <label class="switch"> <input type="checkbox" class="dark_mode_checkbox"> <span class="slider round"></span> </label> #}
+                                    <div class="text">Dark side</div>
+                                    <input type="checkbox" class="checkbox dark_mode_checkbox">
+                                </div>
+                            </div>
+                        </div>
                         <div class="home menu-button-divider"></div>
                         <div class="logout menu-button">
                             <a class="a-btn" href="{% url 'logout' %}">Log out</a>
@@ -47,10 +58,19 @@
                         <div>{{ message }}</div>
                     {% endfor %}
                 {% endif %}
+
                 {% block content %}{% endblock content %}
+
+                {{ options|json_script:'options' }}
+
+                {% csrf_token %}
             </div>
         </div>
+
+        <script src="{% static 'main/base.js' %}" defer></script>
+
         {% block js %}{% endblock js %}
+
     </body>
 </html>
 

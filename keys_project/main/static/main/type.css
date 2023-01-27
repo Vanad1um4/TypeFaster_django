@@ -1,3 +1,5 @@
+body.night .outer-box { color: var(--grey4) }
+
 /* === MODAL CONFIRM WINDOW ================================================ */
 
 .confirm-modal {
@@ -170,13 +172,19 @@
 .current {
     background-color: LightGrey;
 }
+body.night .current {
+    background-color: var(--grey1);
+    color: var(--grey8);
+}
 .correct {
     /* background-color: LightGreen; */
     color: var(--grey5);
 }
 .wrong {
-    /* background-color: PaleVioletRed; */
     /* color: var(--grey9); */
     background-color: red;
     color: white;
+}
+body.night .wrong {
+    background-color: PaleVioletRed;
 }

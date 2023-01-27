@@ -18,13 +18,17 @@ def my_library(request):
         return redirect('login')
     user_id = request.user.account.id
     result = db_return_users_books(user_id)[1]
-    return render(request, 'main/my_library.html', {'data': result})
+
+    options_dict = get_options(user_id)
+    return render(request, 'main/my_library.html', {'data': result, 'options': options_dict})
 
 
 def type_no_txt(request):
     if not request.user.is_authenticated:
         return redirect('login')
-    return render(request, 'main/type_no_txt.html')
+    user_id = request.user.account.id
+    options_dict = get_options(user_id)
+    return render(request, 'main/type_no_txt.html', {'options': options_dict})
 
 
 ### BOOK FNs ##################################################################
@@ -227,6 +231,7 @@ def type_text(request, text_id):
         # except:
         #     pass
 
+    options_dict = get_options(user_id)
     return render(request, 'main/type.html', {'data': {
         'complete': complete,
         'cpm': cpm,
@@ -240,7 +245,7 @@ def type_text(request, text_id):
         'id': text_id,
         'prev': prev,
         'next': next,
-    }})
+    }, 'options': options_dict})
 
 
 def return_stats_ajax(request, text_id):
@@ -254,8 +259,15 @@ def return_stats_ajax(request, text_id):
 
     first_time = stats['stats']['0']['time']
     result_list = []
-    for i in stats['stats']:
-        result_list.append([stats['stats'][i]['txt'], stats['stats'][i]['time']-first_time, stats['stats'][i]['error']])
+    for i, letter in enumerate(stats['stats']):
+        if i > 0:
+            result_list.append([stats['stats'][letter]['txt'],
+                                stats['stats'][letter]['time']-first_time,
+                                stats['stats'][letter]['error']])
+        else:
+            result_list.append([stats['stats'][letter]['txt'],
+                                first_time,
+                                stats['stats'][letter]['error']])
 
     result_new = db_save_stats_new(text_id, user_id, json.dumps(result_list), json.dumps(stats['args']))
 
@@ -273,35 +285,35 @@ def return_stats_ajax(request, text_id):
 def my_stats(request):
     if not request.user.is_authenticated:
         return redirect('login')
-    #
-    # user_id = request.user.account.id
-    # result = db_return_all_text_stats(user_id)[1]
-    # letters_dict = {}
-    # for text_str in result:
-    #     text_list = json.loads(text_str[0])
-    #     for letter in text_list:
-    #         # print(letter)
-    #         if letter[0].lower() in letters_dict.keys() and letter[0] != ' ':
-    #             letters_dict[letter[0].lower()]['amt'] += 1
-    #             if letter[2] > 0:
-    #                 letters_dict[letter[0].lower()]['err'] += 1
-    #         elif letter[0] != ' ':
-    #             letters_dict[letter[0].lower()] = {}
-    #             letters_dict[letter[0].lower()]['amt'] = 1
-    #             letters_dict[letter[0].lower()]['err'] = 0
-    #
-    # print(letters_dict)
-    # # for i, k in letters_dict.items():
-    # #     print(i, k)
-    # # data_sorted = sorted(letters_dict.items(), key=lambda x: x[1]['amt'], reverse=True)
-    # # print(data_sorted)
 
-    letters_dict = {'l': {'amt': 11179, 'err': 604}, 'o': {'amt': 18931, 'err': 2178}, 'n': {'amt': 16652, 'err': 1138}, 'p': {'amt': 4563, 'err': 334}, 'e': {'amt': 30679, 'err': 1930}, 'h': {'amt': 15607, 'err': 1054}, 't': {'amt': 22775, 'err': 1637}, 'x': {'amt': 440, 'err': 41}, 's': {'amt': 15319, 'err': 1186}, 'c': {'amt': 6388, 'err': 564}, 'u': {'amt': 6788, 'err': 654}, 'i': {'amt': 17023, 'err': 1735}, 'a': {'amt': 20091, 'err': 1581}, 'd': {'amt': 11908, 'err': 958}, 'b': {'amt': 3577, 'err': 464}, 'k': {'amt': 3170, 'err': 515}, 'g': {'amt': 5516, 'err': 601}, 'y': {'amt': 4263, 'err': 347}, ',': {'amt': 3413, 'err': 515}, 'j': {'amt': 519, 'err': 76}, 'm': {'amt': 6199, 'err': 545}, 'w': {'amt': 5537, 'err': 440}, 'f': {'amt': 4685, 'err': 633}, 'r': {'amt': 13318, 'err': 1560}, '.': {'amt': 5125, 'err': 421}, '⏎': {'amt': 1757, 'err': 120}, '’': {
-        'amt': 1935, 'err': 211}, 'v': {'amt': 2162, 'err': 363}, ';': {'amt': 38, 'err': 8}, '–': {'amt': 1, 'err': 0}, '*': {'amt': 105, 'err': 11}, '-': {'amt': 445, 'err': 93}, 'q': {'amt': 180, 'err': 27}, ':': {'amt': 33, 'err': 2}, 'z': {'amt': 215, 'err': 22}, '?': {'amt': 521, 'err': 49}, '“': {'amt': 1730, 'err': 151}, '”': {'amt': 1718, 'err': 336}, '!': {'amt': 31, 'err': 1}, 'é': {'amt': 2, 'err': 1}, '…': {'amt': 62, 'err': 11}, '2': {'amt': 18, 'err': 2}, '1': {'amt': 18, 'err': 3}, '6': {'amt': 9, 'err': 1}, '8': {'amt': 5, 'err': 0}, '‘': {'amt': 10, 'err': 1}, '0': {'amt': 17, 'err': 6}, '3': {'amt': 9, 'err': 3}, '/': {'amt': 1, 'err': 0}, '5': {'amt': 9, 'err': 3}, '4': {'amt': 4, 'err': 1}, '7': {'amt': 3, 'err': 2}, '&': {'amt': 3, 'err': 2}, '#': {'amt': 3, 'err': 2}, '[': {'amt': 2, 'err': 0}, ']': {'amt': 2, 'err': 0}, '9': {'amt': 2, 'err': 0}}
+    user_id = request.user.account.id
+    result = db_return_all_text_stats(user_id)[1]
+    letters_dict = {}
+    for text_str in result:
+        text_list = json.loads(text_str[0])
+        for letter in text_list:
+            # print(letter)
+            if letter[0].lower() in letters_dict.keys() and letter[0] != ' ':
+                letters_dict[letter[0].lower()]['amt'] += 1
+                if letter[2] > 0:
+                    letters_dict[letter[0].lower()]['err'] += 1
+            elif letter[0] != ' ':
+                letters_dict[letter[0].lower()] = {}
+                letters_dict[letter[0].lower()]['amt'] = 1
+                letters_dict[letter[0].lower()]['err'] = 0
+
+    # print(letters_dict)
+    # for i, k in letters_dict.items():
+    #     print(i, k)
+    # data_sorted = sorted(letters_dict.items(), key=lambda x: x[1]['amt'], reverse=True)
+    # print(data_sorted)
+
+    # letters_dict = {'l': {'amt': 11179, 'err': 604}, 'o': {'amt': 18931, 'err': 2178}, 'n': {'amt': 16652, 'err': 1138}, 'p': {'amt': 4563, 'err': 334}, 'e': {'amt': 30679, 'err': 1930}, 'h': {'amt': 15607, 'err': 1054}, 't': {'amt': 22775, 'err': 1637}, 'x': {'amt': 440, 'err': 41}, 's': {'amt': 15319, 'err': 1186}, 'c': {'amt': 6388, 'err': 564}, 'u': {'amt': 6788, 'err': 654}, 'i': {'amt': 17023, 'err': 1735}, 'a': {'amt': 20091, 'err': 1581}, 'd': {'amt': 11908, 'err': 958}, 'b': {'amt': 3577, 'err': 464}, 'k': {'amt': 3170, 'err': 515}, 'g': {'amt': 5516, 'err': 601}, 'y': {'amt': 4263, 'err': 347}, ',': {'amt': 3413, 'err': 515}, 'j': {'amt': 519, 'err': 76}, 'm': {'amt': 6199, 'err': 545}, 'w': {'amt': 5537, 'err': 440}, 'f': {'amt': 4685, 'err': 633}, 'r': {'amt': 13318, 'err': 1560}, '.': {'amt': 5125, 'err': 421}, '⏎': {'amt': 1757, 'err': 120}, '’': {
+    #     'amt': 1935, 'err': 211}, 'v': {'amt': 2162, 'err': 363}, ';': {'amt': 38, 'err': 8}, '–': {'amt': 1, 'err': 0}, '*': {'amt': 105, 'err': 11}, '-': {'amt': 445, 'err': 93}, 'q': {'amt': 180, 'err': 27}, ':': {'amt': 33, 'err': 2}, 'z': {'amt': 215, 'err': 22}, '?': {'amt': 521, 'err': 49}, '“': {'amt': 1730, 'err': 151}, '”': {'amt': 1718, 'err': 336}, '!': {'amt': 31, 'err': 1}, 'é': {'amt': 2, 'err': 1}, '…': {'amt': 62, 'err': 11}, '2': {'amt': 18, 'err': 2}, '1': {'amt': 18, 'err': 3}, '6': {'amt': 9, 'err': 1}, '8': {'amt': 5, 'err': 0}, '‘': {'amt': 10, 'err': 1}, '0': {'amt': 17, 'err': 6}, '3': {'amt': 9, 'err': 3}, '/': {'amt': 1, 'err': 0}, '5': {'amt': 9, 'err': 3}, '4': {'amt': 4, 'err': 1}, '7': {'amt': 3, 'err': 2}, '&': {'amt': 3, 'err': 2}, '#': {'amt': 3, 'err': 2}, '[': {'amt': 2, 'err': 0}, ']': {'amt': 2, 'err': 0}, '9': {'amt': 2, 'err': 0}}
 
     letters_list = []
     for i in letters_dict:
-        print(i, letters_dict[i])
+        # print(i, letters_dict[i])
         # print(i[0], i[1]['amt'])
         letters_list.append([i, letters_dict[i]['amt'], letters_dict[i]['err']])
     # print(letters_list)
@@ -328,6 +340,28 @@ def my_stats(request):
     data.append(data_freq_normalized)
     return render(request, 'main/stats.html', {'data': data})
 
+
+### STATS FNs #################################################################
+
+def get_options(user_id):
+    options_res = db_get_options(user_id)
+    options_dict = {'dark_mode': False}
+    if options_res[0] == 'success':
+        options_dict = options_res[1][0]
+    return options_dict
+
+
+def set_options_ajax(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    user_id = request.user.account.id
+    options = json.loads(request.body)
+    dark_mode = options['dark_mode']
+    result = db_set_options(user_id, dark_mode)
+    if result[0] == 'success':
+        return HttpResponse(status=204)
+    else:
+        return HttpResponse(status=500)
 
 ### TEST FNs ##################################################################
 

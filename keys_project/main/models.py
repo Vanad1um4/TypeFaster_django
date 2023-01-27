@@ -198,6 +198,33 @@ def db_return_all_text_stats(user_id):
         return ('failure', [])
 
 
+### TEXT FNs ##################################################################
+
+def db_get_options(user_id):
+    try:
+        with connection.cursor() as c:
+            sql = 'select * from options where user_id=%s;'
+            values = (user_id,)
+            c.execute(sql, values)
+            res = dict_fetchall(c)
+            return ('success', res)
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
+def db_set_options(user_id, dark_mode):
+    try:
+        with connection.cursor() as c:
+            sql = 'update options set dark_mode=%s where user_id=%s;'
+            values = (dark_mode, user_id)
+            c.execute(sql, values)
+            return ('success', [])
+    except Exception as exc:
+        err_logger.exception(exc)
+        return ('failure', [])
+
+
 # def db_return_one_text_stats(user_id, text_id):
 #     try:
 #         with connection.cursor() as c:
