@@ -289,8 +289,13 @@ def my_stats(request):
     user_id = request.user.account.id
     result = db_return_all_text_stats(user_id)[1]
     letters_dict = {}
+    words_dict = {}
+    words_sum = 0
+    bl = '.,!?"«»“”…'
     for text_str in result:
         text_list = json.loads(text_str[0])
+        word = ''
+        word_errors = 0
         for letter in text_list:
             # print(letter)
             if letter[0].lower() in letters_dict.keys() and letter[0] != ' ':
@@ -302,11 +307,48 @@ def my_stats(request):
                 letters_dict[letter[0].lower()]['amt'] = 1
                 letters_dict[letter[0].lower()]['err'] = 0
 
+            if letter[0] == ' ' or letter[0] == '⏎':
+                if word in words_dict.keys():
+                    words_dict[word]['amt'] += 1
+                    if word_errors > 0:
+                        words_dict[word]['err'] += 1
+                    words_sum += 1
+                else:
+                    words_dict[word] = {}
+                    words_dict[word]['amt'] = 1
+                    words_dict[word]['err'] = 0
+                word = ''
+                word_errors = 0
+            elif letter[0] in bl:
+                pass
+            else:
+                word += letter[0].lower()
+                if letter[2] > 0:
+                    word_errors += 1
+
     # print(letters_dict)
     # for i, k in letters_dict.items():
     #     print(i, k)
     # data_sorted = sorted(letters_dict.items(), key=lambda x: x[1]['amt'], reverse=True)
     # print(data_sorted)
+
+    # print(words_dict)
+    words_sorted = sorted(words_dict.items(), key=lambda x: x[1]['amt'], reverse=True)
+    # print(words_sorted)
+    words_with_error_rate = {}
+    limit = words_sum / 2000
+    for i in words_sorted:
+        if i[1]['amt'] > limit:
+            i[1]['error_rate'] = round(i[1]['err'] / i[1]['amt'] * 1000) / 10
+            # print(i)
+            # words_with_error_rate[i[0]] = {}
+            words_with_error_rate[i[0]] = i[1]
+    # print(words_sum)
+
+    words_with_error_rate_sorted = sorted(words_with_error_rate.items(), key=lambda x: x[1]['error_rate'], reverse=True)
+
+    for i in words_with_error_rate_sorted:
+        print(i)
 
     # letters_dict = {'l': {'amt': 11179, 'err': 604}, 'o': {'amt': 18931, 'err': 2178}, 'n': {'amt': 16652, 'err': 1138}, 'p': {'amt': 4563, 'err': 334}, 'e': {'amt': 30679, 'err': 1930}, 'h': {'amt': 15607, 'err': 1054}, 't': {'amt': 22775, 'err': 1637}, 'x': {'amt': 440, 'err': 41}, 's': {'amt': 15319, 'err': 1186}, 'c': {'amt': 6388, 'err': 564}, 'u': {'amt': 6788, 'err': 654}, 'i': {'amt': 17023, 'err': 1735}, 'a': {'amt': 20091, 'err': 1581}, 'd': {'amt': 11908, 'err': 958}, 'b': {'amt': 3577, 'err': 464}, 'k': {'amt': 3170, 'err': 515}, 'g': {'amt': 5516, 'err': 601}, 'y': {'amt': 4263, 'err': 347}, ',': {'amt': 3413, 'err': 515}, 'j': {'amt': 519, 'err': 76}, 'm': {'amt': 6199, 'err': 545}, 'w': {'amt': 5537, 'err': 440}, 'f': {'amt': 4685, 'err': 633}, 'r': {'amt': 13318, 'err': 1560}, '.': {'amt': 5125, 'err': 421}, '⏎': {'amt': 1757, 'err': 120}, '’': {
     #     'amt': 1935, 'err': 211}, 'v': {'amt': 2162, 'err': 363}, ';': {'amt': 38, 'err': 8}, '–': {'amt': 1, 'err': 0}, '*': {'amt': 105, 'err': 11}, '-': {'amt': 445, 'err': 93}, 'q': {'amt': 180, 'err': 27}, ':': {'amt': 33, 'err': 2}, 'z': {'amt': 215, 'err': 22}, '?': {'amt': 521, 'err': 49}, '“': {'amt': 1730, 'err': 151}, '”': {'amt': 1718, 'err': 336}, '!': {'amt': 31, 'err': 1}, 'é': {'amt': 2, 'err': 1}, '…': {'amt': 62, 'err': 11}, '2': {'amt': 18, 'err': 2}, '1': {'amt': 18, 'err': 3}, '6': {'amt': 9, 'err': 1}, '8': {'amt': 5, 'err': 0}, '‘': {'amt': 10, 'err': 1}, '0': {'amt': 17, 'err': 6}, '3': {'amt': 9, 'err': 3}, '/': {'amt': 1, 'err': 0}, '5': {'amt': 9, 'err': 3}, '4': {'amt': 4, 'err': 1}, '7': {'amt': 3, 'err': 2}, '&': {'amt': 3, 'err': 2}, '#': {'amt': 3, 'err': 2}, '[': {'amt': 2, 'err': 0}, ']': {'amt': 2, 'err': 0}, '9': {'amt': 2, 'err': 0}}

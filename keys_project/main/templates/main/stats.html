@@ -6,10 +6,8 @@
 {% endblock css %}
 
 {% block content %}
-    {# some content goes here #}
     <div id='kb-freq'></div>
     <div id='kb-err'></div>
-    {% csrf_token %}
     {{ data|json_script:'data' }}
 {% endblock content %}
 
