@@ -29,30 +29,11 @@ onInit()
 
 
 function onInit() {
-    if (complete === true) {
-        showConfirmation()
-    } else {
-        continueToTyping()
-    }
+    type()
 }
 
 
-function showConfirmation() {
-    const confirmWindow = document.querySelector('.confirm-modal')
-    confirmWindow.style.display = 'block'
-    const confirmYes = document.querySelector('.confirm-yes')
-    const confirmNo = document.querySelector('.confirm-no')
-    confirmYes.onclick = function() {
-        confirmWindow.style.display = 'none'
-        continueToTyping()
-    }
-    confirmNo.onclick = function() {
-        window.location.href = '/my_library/'
-    }
-}
-
-
-function continueToTyping() {
+function type() {
     document.addEventListener('keydown', function onPress(event) {
     // console.log(pauseStartTime, timeExclude)
         // event.preventDefault()

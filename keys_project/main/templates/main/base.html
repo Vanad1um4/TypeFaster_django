@@ -16,9 +16,9 @@
         <div class="wrapper">
             <div class="header outer-box">
                 <div class="menu inner-box">
-                    <div class="home menu-button {% if "home" in request.path %}primary-url{% else %}secondary-url{% endif %}">
-                        <a class="a-btn" href="{% url 'home' %}">Home</a>
-                    </div>
+                    {# <div class="home menu-button {% if "home" in request.path %}primary-url{% else %}secondary-url{% endif %}"> #}
+                    {#     <a class="a-btn" href="{% url 'home' %}">Home</a> #}
+                    {# </div> #}
                     {% if user.is_authenticated %}
                         <div class="books menu-button {% if "my_library" in request.path %}primary-url{% else %}secondary-url{% endif %}">
                             <a class="a-btn" href="{% url 'my_library' %}">My library</a>

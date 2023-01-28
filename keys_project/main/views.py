@@ -95,8 +95,8 @@ def get_texts_ajax(request):
             chapter = row['chapter']
             texts.append({chapter: []})
         text = row['text']
-        if len(text) > 45:
-            text = text[:45] + '...'
+        if len(text) > 35:
+            text = text[:35] + '...'
         stats_args = json.loads(row['stats_args'])
         # print(stats_args)
         cpm = 0

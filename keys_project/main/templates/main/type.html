@@ -9,22 +9,6 @@
 
 {% block content %}
 
-    <div class="confirm-modal">
-        <div class="confirm-content">
-            <div class="confirm-header">
-                <div>Warning</div>
-            </div>
-            <div class="confirm-body">
-                <div class="confirm-text">You have already finished this text.</div>
-                <div class="confirm-text">Do you wish to retry?</div>
-            </div>
-            <div class="confirm-btns">
-                <div class="confirm-yes">Yes, retry</div>
-                <div class="confirm-no">No, go back</div>
-            </div>
-        </div>
-    </div>
-
     <div class="wait-modal">
         <div class="wait-message">- 5 seconds. Countdown paused. Continue typing to resume.</div>
     </div>
@@ -43,7 +27,7 @@
 
     <div class="stats">
         <div class="cpm">{{ data.cpm }} cpm</div>
-        <div class="wpm">{{ data.wpm }}  wpm</div>
+        <div class="wpm">{{ data.wpm }} wpm</div>
         <div class="acc">{{ data.acc }}% accuracy</div>
     </div>
 

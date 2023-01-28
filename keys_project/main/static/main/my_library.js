@@ -195,21 +195,29 @@ function textsAndChaptersConstruct(texts) {
         const chapterName = document.createElement('DIV')
         const chapterDone = document.createElement('DIV')
         const chapterCPM = document.createElement('DIV')
+        const chapterWPM = document.createElement('DIV')
         const chapterACC = document.createElement('DIV')
         const chapterDelBtn = document.createElement('BUTTON')
         const chapterYesDelBtn = document.createElement('BUTTON')
 
         chapterName.classList.add('chapter-name')
         chapterDone.classList.add('chapter-done')
-        chapterYesDelBtn.classList.add('hidden')
+        chapterCPM.classList.add('chapter-cpm')
+        chapterWPM.classList.add('chapter-wpm')
+        chapterACC.classList.add('chapter-acc')
+        chapterDelBtn.classList.add('chapter-del')
+        chapterYesDelBtn.classList.add('chapter-yes-del', 'hidden')
+        // chapterYesDelBtn.classList.add('hidden')
 
         chapterName.textContent = Object.keys(chapt)[0]
-        chapterDelBtn.textContent = '🚮'
+        // chapterDelBtn.textContent = '🚮'
+        chapterDelBtn.textContent = 'Del'
         chapterYesDelBtn.textContent = 'YES, DELETE!'
 
-        chapterHeadCont.appendChild(chapterName)
         chapterHeadCont.appendChild(chapterDone)
+        chapterHeadCont.appendChild(chapterName)
         chapterHeadCont.appendChild(chapterCPM)
+        chapterHeadCont.appendChild(chapterWPM)
         chapterHeadCont.appendChild(chapterACC)
         chapterHeadCont.appendChild(chapterDelBtn)
         chapterHeadCont.appendChild(chapterYesDelBtn)
@@ -243,6 +251,7 @@ function textsAndChaptersConstruct(texts) {
         let doneSum = 0
 
         let charsSum = 0
+        let wordsSum = 0
         let timeSum = 0
         let errorsSum = 0
 
@@ -261,6 +270,7 @@ function textsAndChaptersConstruct(texts) {
             const chapterTextText = document.createElement('DIV')
             const chapterTextDone = document.createElement('DIV')
             const chapterTextCPM = document.createElement('DIV')
+            const chapterTextWPM = document.createElement('DIV')
             const chapterTextACC = document.createElement('DIV')
             const chapterTextDelBtn = document.createElement('BUTTON')
             const chapterTextYesDelBtn = document.createElement('BUTTON')
@@ -271,7 +281,7 @@ function textsAndChaptersConstruct(texts) {
 
             if (text['done'] == true) {
                 doneSum++
-                chapterTextDone.textContent = '✅ | '
+                chapterTextDone.textContent = '✅'
             } else {
                 chapterTextDone.textContent = '❌'
             }
@@ -279,23 +289,30 @@ function textsAndChaptersConstruct(texts) {
             chapterTextText.textContent = text['text_preview']
 
             if (text['chars'] > 0) {
+                // console.log(text)
                 const chars = text['chars']
+                const words = text['words']
                 const time = text['time']
                 const errors = text['errors']
                 charsSum += chars
+                wordsSum += words
                 timeSum += time
                 errorsSum += errors
                 const cpm = Math.round(chars / time * 60 * 1000)
-                const acc = Math.round((1.0 - (errors / chars)) * 10000) / 100
-                chapterTextCPM.textContent = `${cpm} CPM | `
-                chapterTextACC.textContent = `${acc}% acc | `
+                const wpm = Math.round(words / time * 60 * 1000)
+                // const acc = Math.round((1.0 - (errors / chars)) * 10000) / 100
+                const acc = Math.round((1.0 - (errorsSum / charsSum)) * 100)
+                chapterTextCPM.textContent = `${cpm} CPM`
+                chapterTextWPM.textContent = `${wpm} WPM`
+                chapterTextACC.textContent = `${acc}% acc`
             }
-            chapterTextDelBtn.textContent = '🚮'
+            chapterTextDelBtn.textContent = 'Del'
             chapterTextYesDelBtn.textContent = 'YES, DELETE!'
 
-            chapterTextCont.appendChild(chapterTextText)
             chapterTextCont.appendChild(chapterTextDone)
+            chapterTextCont.appendChild(chapterTextText)
             chapterTextCont.appendChild(chapterTextCPM)
+            chapterTextCont.appendChild(chapterTextWPM)
             chapterTextCont.appendChild(chapterTextACC)
             chapterTextCont.appendChild(chapterTextDelBtn)
             chapterTextCont.appendChild(chapterTextYesDelBtn)
@@ -325,25 +342,31 @@ function textsAndChaptersConstruct(texts) {
         }
         if (charsSum > 0) {
             const cpm = Math.round(charsSum / timeSum * 60 * 1000)
-            const acc = Math.round((1.0 - (errorsSum / charsSum)) * 10000) / 100
-            chapterCPM.textContent = `${cpm} CPM | `
-            chapterACC.textContent = `${acc}% acc | `
+            const wpm = Math.round(wordsSum / timeSum * 60 * 1000)
+            // const acc = Math.round((1.0 - (errorsSum / charsSum)) * 10000) / 100
+            const acc = Math.round((1.0 - (errorsSum / charsSum)) * 100)
+            chapterCPM.textContent = `${cpm} CPM`
+            chapterWPM.textContent = `${wpm} WPM`
+            chapterACC.textContent = `${acc}% acc`
         }
         // console.log(texts)
         if (textSum === doneSum) {
-            chapterDone.textContent = `Done ${doneSum} out of ${textSum} ✅`
+            // chapterDone.textContent = `Done ${doneSum} out of ${textSum} ✅`
+            chapterDone.textContent = `✅`
             // console.log(chapterMainCont.childNodes)
             for (let i=1; i<chapterMainCont.childNodes.length; i++) {
                 chapterMainCont.childNodes[i].classList.toggle('hidden')
             }
         } else if (doneSum > 0) {
-            chapterDone.textContent = `Done ${doneSum} out of ${textSum} 🟡`
+            // chapterDone.textContent = `Done ${doneSum} out of ${textSum} 🟡`
+            chapterDone.textContent = `🟡`
             keepOneMoreOpen++
         } else if (keepOneMoreOpen === 0) {
             chapterDone.textContent = `Done ${doneSum} out of ${textSum}  `
             keepOneMoreOpen++
         } else {
-            chapterDone.textContent = `Done ${doneSum} out of ${textSum} ❌`
+            // chapterDone.textContent = `Done ${doneSum} out of ${textSum} ❌`
+            chapterDone.textContent = `❌`
             for (let i=1; i<chapterMainCont.childNodes.length; i++) {
                 chapterMainCont.childNodes[i].classList.toggle('hidden')
             }
