@@ -143,17 +143,69 @@ body.night .outer-box { color: var(--grey4) }
 
 
 
+
+/* === ANNOUNCEMENT SETTINGS =============================================== */
+
+.info-block {
+    /* padding: 0; */
+}
+
+
+.announcements {
+    display: grid;
+    grid-template-columns: 100%;
+    gap: 8px;
+    color: var(--grey8)
+}
+
+body.light .announcements { color: var(--grey7) }
+body.night .announcements { color: var(--grey4) }
+
+
+
+
+/* === HALT ANNOUNCEMENT =================================================== */
+
+.announcements .halt {
+    display: none;
+    font-weight: bold;
+    user-select: none;
+    font-size: 24px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border: 3px solid orange;
+}
+
+
+
+
+/* === DONE ANNOUNCEMENT =================================================== */
+
+.announcements .done {
+    display: none;
+    font-weight: bold;
+    user-select: none;
+    font-size: 24px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border: 3px solid green;
+}
+
+
+
+
+
 /* === ACTUAL TYPING ======================================================= */
 
-.cpm, .wpm, .acc {
+.stats .cpm, .wpm, .acc {
     display: inline-block;
     font-weight: bold;
     user-select: none;
     font-size: 200%;
     padding-left: 15px;
     padding-right: 15px;
-
 }
+
 .main-text > .paragraph {
     /* font-family: Courier; */
     font-family: monospace;
@@ -171,7 +223,7 @@ body.light.show-errors .corrected { color: #cbb5b5 }
 body.light.show-errors .current { background-color: var(--black) }
 body.light.show-errors .current { color: var(--white) }
 body.light.show-errors .neutral { background-color: var(--grey1) }
-body.light.show-errors .neutral { color: var(--grey8) }
+body.light.show-errors .neutral { color: var(--grey7) }
 
 body.light.not-show-errors .wrong { background-color: red }
 body.light.not-show-errors .wrong { color: white }
@@ -180,7 +232,7 @@ body.light.not-show-errors .corrected { color: var(--grey3) }
 body.light.not-show-errors .current { background-color: var(--black) }
 body.light.not-show-errors .current { color: var(--white) }
 body.light.not-show-errors .neutral { background-color: var(--grey1) }
-body.light.not-show-errors .neutral { color: var(--grey8) }
+body.light.not-show-errors .neutral { color: var(--grey7) }
 
 body.night.show-errors .wrong { background-color: #a12d2d }
 body.night.show-errors .wrong { color: white }

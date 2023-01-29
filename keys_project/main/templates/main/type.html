@@ -7,6 +7,19 @@
 {% endblock css %}
 
 
+{% block info %}
+    <div class="announcements">
+        <div class="stats" style="display: none;">
+            <div class="cpm">{{ data.cpm }} cpm</div>
+            <div class="wpm">{{ data.wpm }} wpm</div>
+            <div class="acc">{{ data.acc }}% accuracy</div>
+        </div>
+        <div class="halt" style="display: none;">...minus 5 seconds. Countdown paused. Continue typing to resume.</div>
+        <div class="done" style="display: none;">Completed. Hit [Enter] to go to the next text or [Backspace] to return to library.</div>
+    </div>
+{% endblock info %}
+
+
 {% block content %}
 
     <div class="wait-modal">
@@ -23,12 +36,6 @@
                 <div class="complete-text">or 'Backspace' to return to library</div>
             </div>
         </div>
-    </div>
-
-    <div class="stats">
-        <div class="cpm">{{ data.cpm }} cpm</div>
-        <div class="wpm">{{ data.wpm }} wpm</div>
-        <div class="acc">{{ data.acc }}% accuracy</div>
     </div>
 
     <div class="main-text"></div>

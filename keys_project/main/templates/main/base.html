@@ -38,6 +38,8 @@
                                     <div class="text width-text">Main width</div>
                                     <input type="text" class="input-field width-input" title="800 - 1800"/>
                                     <button type="submit" class="width-save">💾</button>
+                                    <div class="text show-stats-bar-text">Show stats bar</div>
+                                    <input type="checkbox" class="checkbox show-stats-bar-checkbox">
                                     <div class="text show-errors-text">Show errors</div>
                                     <input type="checkbox" class="checkbox show-errors-checkbox">
                                 </div>
@@ -55,18 +57,26 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="content outer-box">
+            <div class="info-block outer-box">
+
                 {% if messages %}
                     {% for message in messages %}
                         <div>{{ message }}</div>
                     {% endfor %}
                 {% endif %}
 
+                {% block info %}{% endblock info %}
+
+            </div>
+
+            <div class="content outer-box">
+
                 {% block content %}{% endblock content %}
 
                 {{ options|json_script:'options' }}
 
                 {% csrf_token %}
+
             </div>
         </div>
 

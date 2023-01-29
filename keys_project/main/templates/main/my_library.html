@@ -5,6 +5,17 @@
     <link rel="stylesheet" type="text/css" href="{% static 'main/my_library.css' %}">
 {% endblock css %}
 
+{% block info %}
+    <div class="container-info">
+        <div class="book-list-info">
+            👇 Select a book, then...
+        </div>
+        <div class="text-list-info">
+            👇 Select a chapter and a text to type.
+        </div>
+    </div>
+{% endblock info %}
+
 {% block content %}
     <div class="container">
 
@@ -34,7 +45,7 @@
 
             <div class="loading hidden"> <img src="{% static 'main/loading.gif' %}" width="25px" height="25px"> </div>
 
-            <div class="texts texts-cont">&lt;-- select a book...
+            <div class="texts texts-cont">
             </div>
 
             <div class="add-text">

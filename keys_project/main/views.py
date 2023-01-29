@@ -347,8 +347,8 @@ def my_stats(request):
 
     words_with_error_rate_sorted = sorted(words_with_error_rate.items(), key=lambda x: x[1]['error_rate'], reverse=True)
 
-    for i in words_with_error_rate_sorted:
-        print(i)
+    # for i in words_with_error_rate_sorted:
+    #     print(i)
 
     # letters_dict = {'l': {'amt': 11179, 'err': 604}, 'o': {'amt': 18931, 'err': 2178}, 'n': {'amt': 16652, 'err': 1138}, 'p': {'amt': 4563, 'err': 334}, 'e': {'amt': 30679, 'err': 1930}, 'h': {'amt': 15607, 'err': 1054}, 't': {'amt': 22775, 'err': 1637}, 'x': {'amt': 440, 'err': 41}, 's': {'amt': 15319, 'err': 1186}, 'c': {'amt': 6388, 'err': 564}, 'u': {'amt': 6788, 'err': 654}, 'i': {'amt': 17023, 'err': 1735}, 'a': {'amt': 20091, 'err': 1581}, 'd': {'amt': 11908, 'err': 958}, 'b': {'amt': 3577, 'err': 464}, 'k': {'amt': 3170, 'err': 515}, 'g': {'amt': 5516, 'err': 601}, 'y': {'amt': 4263, 'err': 347}, ',': {'amt': 3413, 'err': 515}, 'j': {'amt': 519, 'err': 76}, 'm': {'amt': 6199, 'err': 545}, 'w': {'amt': 5537, 'err': 440}, 'f': {'amt': 4685, 'err': 633}, 'r': {'amt': 13318, 'err': 1560}, '.': {'amt': 5125, 'err': 421}, '⏎': {'amt': 1757, 'err': 120}, '’': {
     #     'amt': 1935, 'err': 211}, 'v': {'amt': 2162, 'err': 363}, ';': {'amt': 38, 'err': 8}, '–': {'amt': 1, 'err': 0}, '*': {'amt': 105, 'err': 11}, '-': {'amt': 445, 'err': 93}, 'q': {'amt': 180, 'err': 27}, ':': {'amt': 33, 'err': 2}, 'z': {'amt': 215, 'err': 22}, '?': {'amt': 521, 'err': 49}, '“': {'amt': 1730, 'err': 151}, '”': {'amt': 1718, 'err': 336}, '!': {'amt': 31, 'err': 1}, 'é': {'amt': 2, 'err': 1}, '…': {'amt': 62, 'err': 11}, '2': {'amt': 18, 'err': 2}, '1': {'amt': 18, 'err': 3}, '6': {'amt': 9, 'err': 1}, '8': {'amt': 5, 'err': 0}, '‘': {'amt': 10, 'err': 1}, '0': {'amt': 17, 'err': 6}, '3': {'amt': 9, 'err': 3}, '/': {'amt': 1, 'err': 0}, '5': {'amt': 9, 'err': 3}, '4': {'amt': 4, 'err': 1}, '7': {'amt': 3, 'err': 2}, '&': {'amt': 3, 'err': 2}, '#': {'amt': 3, 'err': 2}, '[': {'amt': 2, 'err': 0}, ']': {'amt': 2, 'err': 0}, '9': {'amt': 2, 'err': 0}}
@@ -388,7 +388,7 @@ def my_stats(request):
 def get_options(user_id):
     options_res = db_get_options(user_id)
     # print(options_res)
-    options_dict = {'dark_mode': False, 'show_errors': False, 'width': 1000}
+    options_dict = {'dark_mode': False, 'show_errors': False, 'show_stats_bar': True, 'width': 1000}
     # print(options_dict)
     if options_res[0] == 'success':
         options_dict = options_res[1][0]
@@ -404,8 +404,9 @@ def set_options_ajax(request):
     # print(options)
     dark_mode = options['dark_mode']
     show_errors = options['show_errors']
+    show_stats_bar = options['show_stats_bar']
     width = options['width']
-    result = db_set_options(user_id, dark_mode, show_errors, width)
+    result = db_set_options(user_id, dark_mode, show_errors, show_stats_bar, width)
     if result[0] == 'success':
         return HttpResponse(status=204)
     else:

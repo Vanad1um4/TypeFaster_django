@@ -15,16 +15,28 @@ h2 {
     margin: 7px;
     text-align: center;
 }
+
+.container-info {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    /* font-weight: bold; */
+    user-select: none;
+    font-size: 18px;
+}
+.container-info .book-list-info { padding-left: 13px }
+.container-info .text-list-info { padding-left: 25px }
+
+body.light .container-info .book-list-info { color: var(--grey7) }
+body.light .container-info .text-list-info { color: var(--grey7) }
+body.night .container-info .book-list-info { color: var(--grey4) }
+body.night .container-info .text-list-info { color: var(--grey4) }
+
+
+
 .container {
     display: grid;
     grid-template-columns: 35% 65%;
 }
-
-
-
-
-
-
 .container > .book-list {
 }
 

@@ -1,7 +1,10 @@
-const waitDiv = document.querySelector('.wait-modal')
 const cpmDiv = document.querySelector('div.cpm')
 const wpmDiv = document.querySelector('div.wpm')
 const accDiv = document.querySelector('div.acc')
+const waitAnnouncement = document.querySelector('.halt')
+const doneAnnouncement = document.querySelector('.done')
+const optionsWidthInput = document.querySelector('.width-input')
+
 const csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 let statsDB = {}
 const [charCount, wordCount, charsPerWord, text_id, complete, nextTextId] = textConstruct()
@@ -28,26 +31,27 @@ console.log(charsPerWord,'characters per word')
 onInit()
 
 function onInit() {
+    hideParentIfChildrenAreHidden()
     document.addEventListener('keydown', function onPress(event) {
     // console.log(pauseStartTime, timeExclude)
         // event.preventDefault()
         const key = event.key
         // console.log(key)
-        if (key === ` ` || key === `'` || key === '`' || key === `/`) {
+        if ((key === ` ` || key === `'` || key === '`' || key === `/`) && optionsWidthInput !== document.activeElement) {
             event.preventDefault()
         }
-        if ((key.toString().length === 1 || key === 'Enter') && step < charCount) {
+        if ((key.toString().length === 1 || key === 'Enter') && step < charCount && optionsWidthInput !== document.activeElement) {
             clearTimeout(timeoutID)
-            timeoutID = setTimeout(showWaitMessage, 5000999)
+            timeoutID = setTimeout(showWaitMessage, 5000)
             hideWaitMessage(step)
             keyPressedValidate(step, key)
             forwardProp(step)
             stats(step)
             step++
-        } else if (key === 'Backspace' && step > 0) {
+        } else if (key === 'Backspace' && step > 0 && optionsWidthInput !== document.activeElement) {
             hideWaitMessage(step)
             clearTimeout(timeoutID)
-            timeoutID = setTimeout(showWaitMessage, 5000999)
+            timeoutID = setTimeout(showWaitMessage, 5000)
             backwardProp(step)
             step--
         }
@@ -94,11 +98,13 @@ function keyPressedValidate(i, key) {
 
 
 function showWaitMessage() {
-    waitDiv.style.display = 'block'
+    waitAnnouncement.style.display = 'block'
+    hideParentIfChildrenAreHidden()
     pauseStartTime = Date.now() - 5000
 }
 function hideWaitMessage(i) {
-    waitDiv.style.display = 'none'
+    waitAnnouncement.style.display = 'none'
+    hideParentIfChildrenAreHidden()
 }
 function checkForPauseTime(i) {
 }
@@ -142,10 +148,9 @@ function sendStatsBack() {
 
 
 function showCompleteDialogue() {
-    const completeWindow = document.querySelector('.complete-modal')
-    completeWindow.classList.remove('hidden')
+    doneAnnouncement.style.display = 'block'
+    hideParentIfChildrenAreHidden()
     document.addEventListener('keydown', function onPress(event) {
-        // console.log(event.key)
         if (event.key === 'Enter') {
             document.removeEventListener('keydown', onPress, false)
             window.location.href = '/type/' + nextTextId
@@ -259,6 +264,26 @@ function textConstruct() {
         }
     }
     mainTextDiv.appendChild(newParagraph)
-    console.log(statsDB)
+    // console.log(statsDB)
     return [text.length, wordCount, charsPerWord, data['id'], data['complete'], data['next']]
+}
+
+
+function hideParentIfChildrenAreHidden() {
+    const parent = document.querySelector('.info-block')
+    const children = document.querySelectorAll('.info-block > .announcements > div')
+    // console.log(parent)
+    // console.log(children)
+    let hideParent = true;
+    for(let i = 0; i < children.length; i++){
+        if(children[i].style.display != "none"){
+            hideParent = false;
+            break;
+        }
+    }
+    if(hideParent){
+        parent.style.display = "none";
+    } else {
+        parent.style.display = "block";
+    }
 }

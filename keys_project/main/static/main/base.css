@@ -129,9 +129,9 @@ body.night .options-content-hide {
     grid-template-columns: 122px 53px 28px;
     grid-gap: 10px 6px;
 }
-.options-drop-down .dark-mode-text { grid-column: span 2; }
-.options-drop-down .show-errors-text { grid-column: span 2; }
-.options-drop-down .show-errors-text { grid-column: span 2; }
+.options-drop-down .dark-mode-text { grid-column: span 2 }
+.options-drop-down .show-stats-bar-text { grid-column: span 2 }
+.options-drop-down .show-errors-text { grid-column: span 2 }
 
 .options-drop-down .width-input {
     font-size: 19px;
@@ -151,7 +151,9 @@ body.night .options-content-hide {
     transform: scale(1.2);
 }
 
-/* ========================================================================= */
+
+
+
 /* === SLIDERS ============================================================= */
 
 /* .switch { */
