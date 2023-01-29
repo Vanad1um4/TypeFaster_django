@@ -1,5 +1,5 @@
 :root {
-    --main-width: 1000px;
+    /* --main-width: 1000px; */
     --padding: 5px;
     --gap: 10px;
     --white: white;
@@ -110,43 +110,45 @@ body.night .menu-button.primary-url > .a-btn { color: var(--grey9); }
     position: absolute;
     padding: 12px 16px;
     z-index: 1;
+    border-radius: 3px;
 }
 
 body.light .options-content-hide {
     background-color: var(--grey2);
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    border: 1px solid black;
+    border: 1px solid #b1b1b1;
 }
 body.night .options-content-hide {
     background-color: var(--grey8);
     box-shadow: 0px 8px 16px 0px rgba(255,255,255,0.2);
     border: 1px solid white;
 }
-/* .options-drop-down > .options-content-hide.light { */
-/*     background-color: var(--grey2); */
-/*     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
-/*     border: 1px solid black; */
-/* } */
-/* .options-drop-down > .options-content-hide.night { */
-/*     background-color: var(--grey8); */
-/*     box-shadow: 0px 8px 16px 0px rgba(255,255,255,0.2); */
-/*     border: 1px solid white; */
-/* } */
 
-.options-drop-down > .options-content-hide > .options-content-grid {
+.options-drop-down .options-content-grid {
     display: grid;
-    grid-template-columns: 85% 15%;
+    grid-template-columns: 122px 53px 28px;
+    grid-gap: 10px 6px;
 }
+.options-drop-down .dark-mode-text { grid-column: span 2; }
+.options-drop-down .show-errors-text { grid-column: span 2; }
+.options-drop-down .show-errors-text { grid-column: span 2; }
 
-.options-drop-down > .options-content-hide > .options-content-grid > .text {
-    white-space: nowrap;
-    /* padding: 0px 0px 0px 0px; */
-    margin: 0px 20px 0px 0px;
+.options-drop-down .width-input {
+    font-size: 19px;
+}
+.options-drop-down .text {
     font-size: 23px;
+}
+.options-drop-down .width-save {
+    font-size: 18px;
+    padding: 0px 0px;
+}
+.options-drop-down .text {
+    white-space: nowrap;
     font-weight: bold;
 }
-.options-drop-down > .options-content-hide > .options-content-grid > .checkbox {
-    transform: scale(1.5);
+.options-drop-down .checkbox {
+    transform: scale(1.2);
 }
 
 /* ========================================================================= */

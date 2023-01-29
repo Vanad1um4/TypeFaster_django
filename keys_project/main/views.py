@@ -387,9 +387,12 @@ def my_stats(request):
 
 def get_options(user_id):
     options_res = db_get_options(user_id)
-    options_dict = {'dark_mode': False}
+    # print(options_res)
+    options_dict = {'dark_mode': False, 'show_errors': False, 'width': 1000}
+    # print(options_dict)
     if options_res[0] == 'success':
         options_dict = options_res[1][0]
+        pass
     return options_dict
 
 
@@ -398,8 +401,11 @@ def set_options_ajax(request):
         return redirect('login')
     user_id = request.user.account.id
     options = json.loads(request.body)
+    # print(options)
     dark_mode = options['dark_mode']
-    result = db_set_options(user_id, dark_mode)
+    show_errors = options['show_errors']
+    width = options['width']
+    result = db_set_options(user_id, dark_mode, show_errors, width)
     if result[0] == 'success':
         return HttpResponse(status=204)
     else:

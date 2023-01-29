@@ -362,7 +362,8 @@ function textsAndChaptersConstruct(texts) {
             chapterDone.textContent = `🟡`
             keepOneMoreOpen++
         } else if (keepOneMoreOpen === 0) {
-            chapterDone.textContent = `Done ${doneSum} out of ${textSum}  `
+            // chapterDone.textContent = `Done ${doneSum} out of ${textSum}  `
+            chapterDone.textContent = `❌`
             keepOneMoreOpen++
         } else {
             // chapterDone.textContent = `Done ${doneSum} out of ${textSum} ❌`

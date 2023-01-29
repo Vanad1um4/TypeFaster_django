@@ -161,30 +161,41 @@ body.night .outer-box { color: var(--grey4) }
     user-select: none;
     font-size: 200%;
     padding: 7px 15px;
-    /* padding-left: 15px; */
-    /* padding-right: 15px; */
+    cursor: text;
 }
 
-.neutral {
-    /* background-color: LightGrey; */
-    /* background-color: white; */
-}
-.current {
-    background-color: LightGrey;
-}
-body.night .current {
-    background-color: var(--grey1);
-    color: var(--grey8);
-}
-.correct {
-    /* background-color: LightGreen; */
-    color: var(--grey5);
-}
-.wrong {
-    /* color: var(--grey9); */
-    background-color: red;
-    color: white;
-}
-body.night .wrong {
-    background-color: PaleVioletRed;
-}
+body.light.show-errors .wrong { background-color: red }
+body.light.show-errors .wrong { color: white }
+body.light.show-errors .right { color: #9bb59b }
+body.light.show-errors .corrected { color: #cbb5b5 }
+body.light.show-errors .current { background-color: var(--black) }
+body.light.show-errors .current { color: var(--white) }
+body.light.show-errors .neutral { background-color: var(--grey1) }
+body.light.show-errors .neutral { color: var(--grey8) }
+
+body.light.not-show-errors .wrong { background-color: red }
+body.light.not-show-errors .wrong { color: white }
+body.light.not-show-errors .right { color: var(--grey3) }
+body.light.not-show-errors .corrected { color: var(--grey3) }
+body.light.not-show-errors .current { background-color: var(--black) }
+body.light.not-show-errors .current { color: var(--white) }
+body.light.not-show-errors .neutral { background-color: var(--grey1) }
+body.light.not-show-errors .neutral { color: var(--grey8) }
+
+body.night.show-errors .wrong { background-color: #a12d2d }
+body.night.show-errors .wrong { color: white }
+body.night.show-errors .right { color: #506a50 }
+body.night.show-errors .corrected { color: #6e5656 }
+body.night.show-errors .current { background-color: var(--white) }
+body.night.show-errors .current { color: var(--black) }
+body.night.show-errors .neutral { background-color: var(--grey8) }
+body.night.show-errors .neutral { color: var(--grey4) }
+
+body.night.not-show-errors .wrong { background-color: #a12d2d }
+body.night.not-show-errors .wrong { color: white }
+body.night.not-show-errors .right { color: var(--grey6) }
+body.night.not-show-errors .corrected { color: var(--grey6) }
+body.night.not-show-errors .current { background-color: var(--white) }
+body.night.not-show-errors .current { color: var(--black) }
+body.night.not-show-errors .neutral { background-color: var(--grey8) }
+body.night.not-show-errors .neutral { color: var(--grey4) }

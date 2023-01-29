@@ -203,7 +203,7 @@ def db_return_all_text_stats(user_id):
 def db_get_options(user_id):
     try:
         with connection.cursor() as c:
-            sql = 'select * from options where user_id=%s;'
+            sql = 'select dark_mode, show_errors, width from options where user_id=%s;'
             values = (user_id,)
             c.execute(sql, values)
             res = dict_fetchall(c)
@@ -213,11 +213,11 @@ def db_get_options(user_id):
         return ('failure', [])
 
 
-def db_set_options(user_id, dark_mode):
+def db_set_options(user_id, dark_mode, show_errors, width):
     try:
         with connection.cursor() as c:
-            sql = 'update options set dark_mode=%s where user_id=%s;'
-            values = (dark_mode, user_id)
+            sql = 'update options set dark_mode=%s, show_errors=%s, width=%s where user_id=%s;'
+            values = (dark_mode, show_errors, width, user_id)
             c.execute(sql, values)
             return ('success', [])
     except Exception as exc:

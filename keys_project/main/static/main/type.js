@@ -27,13 +27,7 @@ console.log(charsPerWord,'characters per word')
 
 onInit()
 
-
 function onInit() {
-    type()
-}
-
-
-function type() {
     document.addEventListener('keydown', function onPress(event) {
     // console.log(pauseStartTime, timeExclude)
         // event.preventDefault()
@@ -44,16 +38,16 @@ function type() {
         }
         if ((key.toString().length === 1 || key === 'Enter') && step < charCount) {
             clearTimeout(timeoutID)
-            timeoutID = setTimeout(showWaitMessage, 5000)
-            keyPressedValidate(step, key)
+            timeoutID = setTimeout(showWaitMessage, 5000999)
             hideWaitMessage(step)
+            keyPressedValidate(step, key)
             forwardProp(step)
             stats(step)
             step++
         } else if (key === 'Backspace' && step > 0) {
             hideWaitMessage(step)
             clearTimeout(timeoutID)
-            timeoutID = setTimeout(showWaitMessage, 5000)
+            timeoutID = setTimeout(showWaitMessage, 5000999)
             backwardProp(step)
             step--
         }
@@ -75,28 +69,23 @@ function keyPressedValidate(i, key) {
     const syl = statsDB['stats'][i]['txt']
     // console.log(syl)
     let span = document.querySelector(`span[id="n${i.toString()}"]`)
-    span.classList.remove('correct', 'wrong', 'current', 'neutral')
-    // different strokes
-    if ((strokes.includes(key) || key === '`') && (strokes.includes(syl) || syl === '`')) {
-        span.classList.add('correct');
-    // different quotes
-    } else if (quotes.includes(key) && quotes.includes(syl)) {
-        span.classList.add('correct');
-    // different dashes
-    } else if (dashes.includes(key) && dashes.includes(syl)) {
-        span.classList.add('correct')
-    // different dots
-    } else if (dots.includes(key) && dots.includes(syl)) {
-        span.classList.add('correct')
-    // different spaces
-    } else if (spaces.includes(key) && spaces.includes(syl)) {
-        span.classList.add('correct')
-    // enter
-    } else if (key ==='Enter' && syl === '⏎') {
-        span.classList.add('correct')
-    } else if (key === syl) {
-        span.classList.add('correct')
+
+    if ((key === syl) ||
+        (strokes.includes(key) || key === '`') && (strokes.includes(syl) || syl === '`') ||
+        (quotes.includes(key) && quotes.includes(syl)) ||
+        (dashes.includes(key) && dashes.includes(syl)) ||
+        (spaces.includes(key) && spaces.includes(syl)) ||
+        (dots.includes(key) && dots.includes(syl)) ||
+        (key ==='Enter' && syl === '⏎')) {
+        if (span.classList.contains('wrong')) {
+            span.classList.remove('wrong', 'current', 'neutral')
+            span.classList.add('corrected')
+        } else {
+            span.classList.remove('current', 'neutral')
+            span.classList.add('right');
+        }
     } else {
+        span.classList.remove('corrected', 'right', 'current', 'neutral')
         span.classList.add('wrong')
         statsDB['stats'][i]['error']++
         currErrors++
@@ -173,7 +162,8 @@ function showCompleteDialogue() {
 function forwardProp(i) {
     if (i < charCount-1) {
         let nextSpan = document.querySelector(`span[id="n${i+1}"]`)
-        nextSpan.classList.remove('correct', 'wrong', 'current', 'neutral')
+        // nextSpan.classList.remove('right', 'wrong', 'current', 'neutral')
+        nextSpan.classList.remove('neutral')
         nextSpan.classList.add('current')
 
         let screenY = window.innerHeight
@@ -198,11 +188,12 @@ function forwardProp(i) {
 function backwardProp(i) {
     let nextSpan = document.querySelector(`span[id="n${i}"]`)
     // console.log(nextSpan)
-    nextSpan.classList.remove('correct', 'wrong', 'current', 'neutral')
+    // nextSpan.classList.remove('right', 'wrong', 'current', 'neutral')
+    nextSpan.classList.remove('current')
     nextSpan.classList.add('neutral')
     let currSpan = document.querySelector(`span[id="n${i-1}"]`)
     // console.log(nextSpan)
-    currSpan.classList.remove('correct', 'wrong', 'current', 'neutral')
+    // currSpan.classList.remove('right', 'wrong', 'current', 'neutral')
     currSpan.classList.add('current')
 }
 
