@@ -7,10 +7,10 @@ import time
 import sys
 
 
-def home(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    return render(request, 'main/index.html')
+# def home(request):
+#     if not request.user.is_authenticated:
+#         return redirect('login')
+#     return render(request, 'main/index.html')
 
 
 def my_library(request):

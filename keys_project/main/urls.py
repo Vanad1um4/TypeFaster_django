@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('home/', views.home, name='home'),
+    # path('home/', views.home, name='home'),
     path('my_library/', views.my_library, name='my_library'),
     path('type/', views.type_no_txt, name='type_no_txt'),
 
@@ -25,5 +25,5 @@ urlpatterns = [
     # path('test/<int:text_id>/', views.test_ajax),
     # path('test2/', views.test2_ajax),
 
-    path('', RedirectView.as_view(url='home/')),
+    path('', RedirectView.as_view(url='my_library/')),
 ]
